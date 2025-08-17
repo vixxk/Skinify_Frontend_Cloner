@@ -1,0 +1,174 @@
+/* Reset & global */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Inter', sans-serif;
+  background: #f0f4f8;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Header */
+.title {
+  text-align: center;
+  font-size: 2.4rem;
+  font-weight: 800;
+  margin-top: 1rem;
+  background: linear-gradient(90deg, #6c63ff, #ff6584);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.special-note {
+  text-align: center;
+  font-size: 0.9rem;
+  margin: 0.5rem 0 1rem 0;
+}
+
+/* Steps */
+.steps {
+  width: 90%;
+  max-width: 700px;
+  margin: 0 auto 1.5rem auto;
+  font-size: 0.95rem;
+}
+.steps ol {
+  padding-left: 1.2rem;
+}
+
+/* Input area */
+.input-area {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.input-area input {
+  padding: 0.8rem 1.2rem;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  outline: none;
+  width: 300px;
+  font-size: 1rem;
+}
+.input-area input:focus {
+  border-color: #6c63ff;
+  box-shadow: 0 0 0 4px rgba(108,99,255,0.2);
+}
+.input-area button {
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  border: none;
+  background: #6c63ff;
+  color: white;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.input-area button:hover {
+  background: #574fd6;
+}
+
+/* Messages */
+.message {
+  width: 90%;
+  max-width: 500px;
+  margin: 0.5rem auto;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+}
+.error-message {
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #b91c1c;
+}
+.success-message {
+  background: #d1fae5;
+  border: 1px solid #6ee7b7;
+  color: #047857;
+}
+
+/* Result */
+.result-container {
+  width: 90%;
+  max-width: 500px;
+  margin: 1rem auto;
+  padding: 1rem;
+  background: #ffffffdd;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 0.5rem;
+}
+.url-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.url-link {
+  color: #6c63ff;
+  text-decoration: underline;
+}
+.download-button {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: none;
+  background: #16a34a;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+.download-button:hover {
+  background: #15803d;
+}
+
+/* Floating boxes */
+.floating-box {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffffcc;
+  border-radius: 16px;
+  padding: 10px 16px;
+  font-size: 1rem;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  animation: floatX linear infinite;
+}
+.floating-box:hover {
+  animation-play-state: paused;
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+}
+.copy-button {
+  background: #4f46e5;
+  color: #fff;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.copy-button:hover {
+  background: #4338ca;
+}
+
+/* Horizontal floating animation */
+@keyframes floatX {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(60px); }
+  100% { transform: translateX(0); }
+}

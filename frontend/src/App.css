@@ -1,0 +1,236 @@
+Reset & base
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #f0f4f8;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+/* Card */
+.scraper-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+  padding: 2rem;
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Title */
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #3b3b3b;
+  margin-bottom: 1rem;
+}
+
+/* Special Note */
+.special-note {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-bottom: 1rem;
+}
+
+/* Steps */
+.steps {
+  text-align: left;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+.steps ol {
+  padding-left: 1.25rem;
+  margin-top: 0.5rem;
+}
+
+/* Input */
+.input-container {
+  position: relative;
+  margin-bottom: 1rem;
+}
+.keyword-input {
+  width: 100%;
+  padding: 12px 12px 12px 40px;
+  border-radius: 10px;
+  border: 1.5px solid #d1d5db;
+  outline: none;
+  font-size: 0.95rem;
+}
+.keyword-input:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79,70,229,0.2);
+}
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+}
+
+/* Scrape Button */
+.scrape-button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  background: #4f46e5;
+  color: #fff;
+  border: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.scrape-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(79,70,229,0.4);
+}
+.scrape-button.loading {
+  pointer-events: none;
+  opacity: 0.7;
+}
+.spinner {
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Messages */
+.message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 0.75rem 0;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+.error-message {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+}
+.success-message {
+  background-color: #d1fae5;
+  color: #047857;
+  border: 1px solid #6ee7b7;
+}
+
+/* Result Container */
+.result-container {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #f9fafb;
+  border-radius: 10px;
+}
+.url-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 0.75rem;
+  font-size: 0.85rem;
+}
+.url-link {
+  color: #4f46e5;
+  text-decoration: underline;
+}
+.url-link:hover { color: #4338ca; text-decoration: none; }
+
+.download-button {
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #16a34a;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.download-button:hover {
+  background: #15803d;
+}
+
+/* Floating website boxes */
+.website-grid {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  height: 60px;
+  margin-top: 1.5rem;
+}
+.website-row {
+  display: flex;
+  gap: 12px;
+  position: absolute;
+  white-space: nowrap;
+  animation: scroll-left 20s linear infinite;
+}
+.website-row.reverse {
+  animation: scroll-right 25s linear infinite;
+}
+.website-row:hover {
+  animation-play-state: paused;
+}
+.site-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f3f4f6;
+  border-radius: 12px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.site-box:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+.copy-button {
+  background: #4f46e5;
+  color: #fff;
+  border: none;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+.copy-button:hover {
+  background: #4338ca;
+}
+
+/* Floating animations */
+@keyframes scroll-left {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+@keyframes scroll-right {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  .scraper-card { padding: 1.5rem; }
+  .title { font-size: 1.5rem; }
+}
