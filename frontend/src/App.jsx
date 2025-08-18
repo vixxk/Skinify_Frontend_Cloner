@@ -9,7 +9,7 @@ export default function App() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const BACKEND_URL = "http://localhost:3001";
+  const BACKEND_URL = "https://skinify-backend-ui4w.onrender.com";
 
   const defaultWebsites = [
     "hitesh.ai",
