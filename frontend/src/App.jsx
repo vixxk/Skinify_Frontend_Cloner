@@ -19,7 +19,8 @@ export default function App() {
     "nextjs.org",
     "en.wikipedia.org",
     "getbootstrap.com",
-    "w3schools.com"
+    "w3schools.com",
+    "geeksforgeeks"
   ];
 
   const handleScrape = async () => {
