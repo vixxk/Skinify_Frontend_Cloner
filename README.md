@@ -66,7 +66,7 @@ PORT=3001
 **Start backend:**
 ```bash
 cd backend
-npm start
+node server.js 
 ```
 
 **Start frontend:**
