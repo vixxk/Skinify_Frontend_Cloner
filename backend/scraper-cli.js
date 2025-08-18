@@ -10,45 +10,80 @@ const openai = new OpenAI({
   baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/',
 });
 
+function getUniqueFolderName(basePath, baseName) {
+  let folderName = baseName;
+  let counter = 1;
+  
+  let fullPath = path.join(basePath, folderName);
+  
+  while (fs.existsSync(fullPath)) {
+    folderName = `${baseName}(${counter})`;
+    fullPath = path.join(basePath, folderName);
+    counter++;
+  }
+  
+  return folderName;
+}
+
 export async function scrapeWebsite(websiteURL) {
-  const domainName = new URLConstructor(websiteURL).hostname.replace(/\./g, '-'); //folder name should contain '-' instead of '.'
+  const baseDomainName = new URLConstructor(websiteURL).hostname.replace(/\./g, '-'); //folder name should contain '-' instead of '.'
   const downloadsPath = path.join(process.cwd(), 'downloads');
   
   if (!fs.existsSync(downloadsPath)) {
     fs.mkdirSync(downloadsPath);
   }
   
-  const OUTPUT_DIR = path.join(downloadsPath, domainName);
+  const uniqueFolderName = getUniqueFolderName(downloadsPath, baseDomainName);
+  const OUTPUT_DIR = path.join(downloadsPath, uniqueFolderName);
   
-  await scrape({
-    urls: [websiteURL],
-    directory: OUTPUT_DIR,
-    recursive: false, // Only scrape the landing page, for subdomains -> true
-    plugins: [],
-    subdirectories: [
-      { directory: 'images', extensions: ['.jpg', '.png', '.gif', '.svg'] },
-      { directory: 'js', extensions: ['.js'] },
-      { directory: 'css', extensions: ['.css'] },
-    ],
-    urlFilter: (url) => url.startsWith('http'),
-  });
+  try {
+    await scrape({
+      urls: [websiteURL],
+      directory: OUTPUT_DIR,
+      recursive: false, // Only scrape the landing page, for subdomains -> true
+      plugins: [],
+      subdirectories: [
+        { directory: 'images', extensions: ['.jpg', '.png', '.gif', '.svg'] },
+        { directory: 'js', extensions: ['.js'] },
+        { directory: 'css', extensions: ['.css'] },
+      ],
+      urlFilter: (url) => url.startsWith('http'),
+    });
 
-  return domainName;
+    return uniqueFolderName;
+  } catch (error) {
+    console.error('Error scraping website:', error);
+    
+    // Clean up the directory if scraping failed
+    if (fs.existsSync(OUTPUT_DIR)) {
+      fs.rmSync(OUTPUT_DIR, { recursive: true, force: true });
+    }
+    
+    throw error;
+  }
 }
 
 export async function resolveWebsiteURL(keyword) {
-  const response = await openai.chat.completions.create({
-    model: 'gemini-2.0-flash',
-    messages: [
-      {
-        role: 'system',
-        content: `You are a helpful assistant that only returns the official homepage URL for a given company, product, or service keyword. Return null if unsure.`,
-      },
-      { role: 'user', content: `Give me the official website URL for: "${keyword} or try to find relevant website's URL for: ${keyword}"` },
-    ],
-  });
+  try {
+    const response = await openai.chat.completions.create({
+      model: 'gemini-2.0-flash',
+      messages: [
+        {
+          role: 'system',
+          content: `You are a helpful assistant that only returns the official homepage URL for a given company, product, or service keyword. Return only the URL, nothing else. Return null if unsure.`,
+        },
+        { 
+          role: 'user', 
+          content: `Give me the official website URL for: "${keyword}" or try to find the most relevant website's URL for: ${keyword}` 
+        },
+      ],
+    });
 
-  const answer = response.choices[0].message.content.trim();
-  const match = answer.match(/https?:\/\/[^\s"]+/);//Extract the website URL from AI's Response
-  return match ? match[0] : null; //Only the first URL
+    const answer = response.choices[0].message.content.trim();
+    const match = answer.match(/https?:\/\/[^\s"]+/); //Extract the website URL from AI's Response
+    return match ? match[0] : null; //Only the first URL
+  } catch (error) {
+    console.error('Error resolving website URL:', error);
+    return null;
+  }
 }
