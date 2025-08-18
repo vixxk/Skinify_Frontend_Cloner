@@ -9,7 +9,12 @@ import { resolveWebsiteURL, scrapeWebsite } from "./scraper-cli.js";
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(cors());
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
+
 app.use(bodyParser.json());
 
 app.post("/api/resolve", async (req, res) => {
@@ -32,7 +37,7 @@ app.get("/download/:folderName", async (req, res) => {
   const folderPath = path.join(process.cwd(), "downloads", req.params.folderName);
 
   if (!fs.existsSync(folderPath)) return res.status(404).send("Folder not found");
-
+  
   // This tells the browser that this file is meant to be downloaded, not displayed
   res.setHeader("Content-Disposition", `attachment; filename=${req.params.folderName}.zip`);
   res.setHeader("Content-Type", "application/zip");
