@@ -4,7 +4,7 @@ import fs from "fs";
 import archiver from "archiver";
 import cors from "cors";
 import bodyParser from "body-parser";
-import { resolveWebsiteURL, scrapeWebsite } from "./scraper-cli.js";
+import { resolveWebsiteURL, scrapeWebsiteByScraper,scrapeWebsiteByPuppeteer} from "./scraper-cli.js";
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -17,7 +17,23 @@ app.use(cors({
 
 app.use(bodyParser.json());
 
-app.post("/api/resolve", async (req, res) => {
+app.post("/api/resolve/1", async (req, res) => {
+  const { keyword,isRecursive } = req.body;
+  if (!keyword) return res.status(400).json({ error: "Keyword missing" });
+
+  try {
+    const url = await resolveWebsiteURL(keyword);
+    if (!url) return res.json({ url: null, folder: null });
+
+    const folder = await scrapeWebsiteByScraper(url,isRecursive);
+    res.json({ url, folder });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to scrape website" });
+  }
+});
+
+app.post("/api/resolve/2", async (req, res) => {
   const { keyword } = req.body;
   if (!keyword) return res.status(400).json({ error: "Keyword missing" });
 
@@ -25,13 +41,14 @@ app.post("/api/resolve", async (req, res) => {
     const url = await resolveWebsiteURL(keyword);
     if (!url) return res.json({ url: null, folder: null });
 
-    const folder = await scrapeWebsite(url);
+    const folder = await scrapeWebsiteByPuppeteer(url);
     res.json({ url, folder });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Failed to scrape website" });
+    res.status(500).json({ error: "Failed to scrape website with puppeteer" });
   }
 });
+
 
 app.get("/download/:folderName", async (req, res) => {
   const folderPath = path.join(process.cwd(), "downloads", req.params.folderName);

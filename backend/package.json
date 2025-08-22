@@ -12,13 +12,17 @@
   "description": "",
   "dependencies": {
     "archiver": "^7.0.1",
+    "cheerio": "^1.1.2",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
+    "extra": "^0.2.1",
     "fs": "^0.0.1-security",
     "fs-extra": "^11.3.1",
     "openai": "^5.12.2",
+    "p-limit": "^7.1.0",
     "path": "^0.12.7",
+    "puppeteer": "^24.17.0",
     "url": "^0.11.4",
     "website-scraper": "^5.3.1"
   }

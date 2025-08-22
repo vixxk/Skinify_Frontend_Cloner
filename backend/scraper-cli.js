@@ -4,6 +4,8 @@ import scrape from 'website-scraper';
 import path from 'path';
 import fs from 'fs';
 import { URL as URLConstructor } from 'url';
+import { ContentExtractor } from './content-extractor.js';
+
 
 const openai = new OpenAI({
   apiKey: process.env.GEMINI_API_KEY,
@@ -25,7 +27,7 @@ function getUniqueFolderName(basePath, baseName) {
   return folderName;
 }
 
-export async function scrapeWebsite(websiteURL) {
+export async function scrapeWebsiteByScraper(websiteURL,isRecursive = false) {
   const baseDomainName = new URLConstructor(websiteURL).hostname.replace(/\./g, '-'); //folder name should contain '-' instead of '.'
   const downloadsPath = path.join(process.cwd(), 'downloads');
   
@@ -40,7 +42,7 @@ export async function scrapeWebsite(websiteURL) {
     await scrape({
       urls: [websiteURL],
       directory: OUTPUT_DIR,
-      recursive: false, // Only scrape the landing page, for subdomains -> true
+      recursive: isRecursive, // Only scrape the landing page -> false, for subdomains also -> true
       plugins: [],
       subdirectories: [
         { directory: 'images', extensions: ['.jpg', '.png', '.gif', '.svg'] },
@@ -70,7 +72,8 @@ export async function resolveWebsiteURL(keyword) {
       messages: [
         {
           role: 'system',
-          content: `You are a helpful assistant that only returns the official homepage URL for a given company, product, or service keyword. Return only the URL, nothing else. Return null if unsure.`,
+          content: `You are a helpful assistant that only returns the official homepage URL for a given company, product, or service keyword. Return only the URL, nothing else. 
+          Return null if unsure.Check if the given prompt is a valid URL itself then no need to find,just return it.`,
         },
         { 
           role: 'user', 
@@ -85,5 +88,29 @@ export async function resolveWebsiteURL(keyword) {
   } catch (error) {
     console.error('Error resolving website URL:', error);
     return null;
+  }
+}
+
+export async function scrapeWebsiteByPuppeteer(websiteURL) {
+  const baseDomainName = new URLConstructor(websiteURL).hostname.replace(/\./g, '-');
+  const downloadsPath = path.join(process.cwd(), 'downloads');
+
+  if (!fs.existsSync(downloadsPath)) {
+    fs.mkdirSync(downloadsPath);
+  }
+
+  const uniqueFolderName = getUniqueFolderName(downloadsPath, baseDomainName);
+  const OUTPUT_DIR = path.join(downloadsPath, uniqueFolderName);
+
+  try {
+    await ContentExtractor.extractFrontendContent(websiteURL, OUTPUT_DIR);
+    return uniqueFolderName;
+  } catch (error) {
+    console.error("Error scraping website with puppeteer:", error);
+
+    if (fs.existsSync(OUTPUT_DIR)) {
+      fs.rmSync(OUTPUT_DIR, { recursive: true, force: true });
+    }
+    throw error;
   }
 }
