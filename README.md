@@ -1,7 +1,7 @@
 # Skinify - Frontend Website Cloner
 
 Clone any website’s frontend assets instantly using AI-powered URL resolution.
-
+May not work for sites with realtime data changes or Network Access Blocked sites.
 ---
 
 ## 🚀 Features
@@ -87,6 +87,7 @@ SKINIFY_FRONTEND_CLONER/
 ├── backend/
 │   ├── downloads/
 │   ├── node_modules/
+│   ├── content-extractor.js 
 │   ├── scraper-cli.js
 │   ├── server.js
 │   ├── package.json
@@ -96,6 +97,7 @@ SKINIFY_FRONTEND_CLONER/
 │   ├── public/
 │   ├── src/
 │   │   └── App.jsx
+│   │   └── App.css
 │   ├── package.json
 │   └── vite.config.js
 ```
@@ -141,4 +143,4 @@ Downloads ZIP: All scraped assets for that site.
 
 - Best for static or light JS sites.  
 - May fail on highly dynamic sites (Netflix, Facebook, GitHub).  
-- Only scrapes landing page unless `recursive: true` is set.
+- Only scrapes landing page unless Deep Mode is ON.

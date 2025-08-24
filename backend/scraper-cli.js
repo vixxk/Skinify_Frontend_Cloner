@@ -72,8 +72,12 @@ export async function resolveWebsiteURL(keyword) {
       messages: [
         {
           role: 'system',
-          content: `You are a helpful assistant that only returns the official homepage URL for a given company, product, or service keyword. Return only the URL, nothing else. 
-          Return null if unsure.Check if the given prompt is a valid URL itself then no need to find,just return it.`,
+          content: `You are a very smart helpful assistant that only returns the official homepage URL for a given company, product, or service for the given keyword.
+          Return only the URL, nothing else.Check if the given prompt is a valid URL itself then no need to find,just return it.
+          If the given prompt is not a valid URL, then find the most relevant URL for the given keyword and return it.
+          For example : Given prompt is piyushgarg.dev then add https://www. in front of the url and return it.
+          For example : Given prompt is google.com then return it as it is.
+          For example : Given prompt is lenovo search for the official website URL, you should perform searching on the given keyword if you ain't able to find the website URL.`,
         },
         { 
           role: 'user', 

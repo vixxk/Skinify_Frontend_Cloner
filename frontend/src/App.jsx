@@ -16,10 +16,10 @@ export default function App() {
   const [model, setModel] = useState("1");
 
   // const BACKEND_URL = "http://localhost:3001";
-    const BACKEND_URL = "https://skinify-backend-ui4w.onrender.com";
+  const BACKEND_URL = "https://skinify-backend-ui4w.onrender.com";
 
-  const defaultWebsites = [
-    "hiteshchoudhary.com",
+  const defaultWebsitesModel1 = [
+    "hitesh.ai",
     "piyushgarg.dev", 
     "code.visualstudio.com",
     "tailwindcss.com",
@@ -29,6 +29,20 @@ export default function App() {
     "w3schools.com",
     "geeksforgeeks"
   ];
+
+  const defaultWebsitesModel2 = [
+    "hitesh.ai",
+    "vercel.com", 
+    "code.visualstudio.com",
+    "razorpay.com",
+    "nextjs.org",
+    "paradox.ai",
+    "docs.chaicode.com",
+    "w3schools.com",
+    "react.dev"
+  ];
+
+  const defaultWebsites = model === "1" ? defaultWebsitesModel1 : defaultWebsitesModel2;
 
   const handleScrape = async () => {
     if (!keyword.trim()) return setError("Please enter a keyword or URL!");
@@ -58,7 +72,7 @@ export default function App() {
       const data = await res.json();
       
       if (!data.url) {
-        setError("Could not resolve URL. Try another keyword or URL.");
+        setError("Could not resolve URL. Try another keyword or paste the URL.");
       } else {
         setResolvedURL(data.url);
         setFolderName(data.folder);
@@ -178,13 +192,15 @@ export default function App() {
               <strong>Note:</strong> Website Scraper works best with light JS websites.
               {deepMode && " Deep mode will scrape all subpages and linked content."} 
               {" "}May not work well with complex sites like Netflix, Facebook or GitHub.
+              Try the other model if cloning fails.
             </p>
           </div>
         )}
         {model === "2" && (
           <div className="note note-green">
             <p>
-              <strong>Note:</strong> Puppeteer + Cheerio extracts more accurately but some images may not appear.
+              <strong>Note:</strong> Puppeteer + Cheerio extracts with more accuracy but some images may not appear.
+              Try the other model if cloning fails.
             </p>
           </div>
         )}
@@ -243,11 +259,7 @@ export default function App() {
                 <div className="progress-fill"></div>
               </div>
               <p className="loading-text">
-                {model === "1" && deepMode ? (
-                  <>Deep scraping in progress... may take 2-5 min<br /><small>Downloading all pages, images, CSS, JS...</small></>
-                ) : (
-                  <>Scraping {model === "1" ? "landing page" : "with Puppeteer"}... usually 10-30s<br /><small>{model === "1" ? "Downloading main page only." : "Advanced parsing."}</small></>
-                )}
+                Downloading time depends on the file size and website complexity...
               </p>
             </div>
           )}
@@ -273,9 +285,19 @@ export default function App() {
           <h3 className="examples-title">Try these popular websites</h3>
           <div className="examples-grid">
             {defaultWebsites.map((site) => (
-              <div key={site} className="example-card" onClick={() => setKeyword(site)}>
+              <div 
+                key={site} 
+                className="example-card" 
+                onClick={() => setKeyword(`https://${site}`)}
+              >
                 <span className="site-name">{site}</span>
-                <button className="copy-btn" onClick={(e) => { e.stopPropagation(); copyToClipboard(site); }}>
+                <button 
+                  className="copy-btn" 
+                  onClick={(e) => { 
+                    e.stopPropagation(); 
+                    copyToClipboard(`https://${site}`); 
+                  }}
+                >
                   <Copy size={14}/>
                 </button>
               </div>
