@@ -104,7 +104,7 @@ export class ContentExtractor {
         });
       });
 
-      // $('script[id="__NEXT_DATA__"]').remove();
+      $('script[id="__NEXT_DATA__"]').remove();
       await fs.writeFile(path.join(outputDir, "index.html"), $.html(), "utf-8");
 
     } finally {
