@@ -13,6 +13,7 @@ export class ContentExtractor {
       browser = await puppeteer.launch({
         headless: true,
         args: ["--no-sandbox", "--disable-dev-shm-usage"],
+        executablePath: puppeteer.executablePath(),
       });
 
       const page = await browser.newPage();
