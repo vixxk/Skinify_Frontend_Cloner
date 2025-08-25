@@ -16,7 +16,8 @@ export default function App() {
   const [model, setModel] = useState("1");
 
   // const BACKEND_URL = "http://localhost:3001";
-  const BACKEND_URL = "https://skinify-backend-ui4w.onrender.com";
+  // const BACKEND_URL = "https://skinify-backend-ui4w.onrender.com";
+   const BACKEND_URL = "https://skinify-frontend-cloner.vercel.app/";
 
   const defaultWebsitesModel1 = [
     "hitesh.ai",
