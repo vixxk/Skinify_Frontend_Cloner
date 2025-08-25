@@ -58,6 +58,17 @@ app.get("/download/:folderName", async (req, res) => {
   const archive = archiver("zip", { zlib: { level: 9 } });
   archive.pipe(res);
   archive.directory(folderPath, false);
+
+  const openShPath = path.join(process.cwd(), "open.sh");
+  if (fs.existsSync(openShPath)) {
+    archive.file(openShPath, { name: "open.sh" });
+  }
+
+  const openBatPath = path.join(process.cwd(), "open.bat");
+  if (fs.existsSync(openBatPath)) {
+    archive.file(openBatPath, { name: "open.bat" });
+  }
+
   await archive.finalize();
 });
 

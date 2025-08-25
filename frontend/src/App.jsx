@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { 
   Download, Globe, Search, Loader2, AlertCircle, CheckCircle, Copy, 
-  Sparkles, Code2, Zap, Cpu, Settings
+  Sparkles, Code2, Zap, Cpu, Settings, Info, Terminal, Monitor
 } from "lucide-react";
 import "./App.css";
 
@@ -17,7 +17,6 @@ export default function App() {
 
   // const BACKEND_URL = "http://localhost:3001";
   const BACKEND_URL = "https://skinify-backend-ui4w.onrender.com";
-  //  const BACKEND_URL = "https://skinify-frontend-cloner.vercel.app/";
 
   const defaultWebsitesModel1 = [
     "hitesh.ai",
@@ -85,7 +84,7 @@ export default function App() {
       if (err.name === "AbortError") {
         setError(`Request timed out. ${deepMode ? "Deep mode takes longer - try again or disable deep mode." : "Try again or check your connection."}`);
       } else if (err.message.includes("HTTP error")) {
-        setError("Server error occurred during scraping. Please try again.");
+        setError("Server error occurred during scraping. The backend memory might be full. Please try again after 2 minutes.");
       } else {
         setError("Cannot connect to server. Please check if the backend is running.");
       }
@@ -113,20 +112,28 @@ export default function App() {
 
   return (
     <div className="app">
+      {/* Model Switch */}
       <div className="fixed-top-bar left">
-        <div className="model-selector">
-          <Cpu size={18} className="cpu-icon" />
-          <select
-            value={model}
-            onChange={(e) => setModel(e.target.value)}
-            className="model-dropdown"
-          >
-            <option value="1">Model 1: Website Scraper</option>
-            <option value="2">Model 2: Puppeteer + Cheerio</option>
-          </select>
+        <div className="model-switch-wrapper">
+          <Cpu size={18} className="model-icon" />
+          <span className="switch-text">Model:</span>
+          <input
+            type="checkbox"
+            id="modelToggle"
+            className="switch-checkbox"
+            checked={model === "2"}
+            onChange={(e) => setModel(e.target.checked ? "2" : "1")}
+          />
+          <label htmlFor="modelToggle" className="switch-label">
+            <span className="switch-slider"></span>
+          </label>
+          <span className="model-status">
+            {model === "1" ? "1" : "2"}
+          </span>
         </div>
       </div>
 
+      {/* Deep Mode Toggle - Only for Model 1 */}
       {model === "1" && (
         <div className="fixed-top-bar right">
           <div className="toggle-wrapper">
@@ -172,36 +179,72 @@ export default function App() {
           <div className="steps-grid">
             {[
               { num: 1, title: "Enter keyword", desc: "Type website name or URL" },
-              { num: 2, title: "Auto-resolve", desc: "We find the correct URL" },
-              { num: 3, title: "Download & Extract", desc: "Get ZIP and extract files" },
-              { num: 4, title: "Open index.html", desc: "Find & open in browser" }
+              { num: 2, title: "Auto-resolve", desc: "Skinify finds the correct URL" },
+              { num: 3, title: "Download & Extract", desc: "Get ZIP and extract files" }
             ].map((step) => (
               <div key={step.num} className="step">
                 <div className="step-number">{step.num}</div>
-                <div>
+                <div className="step-content">
                   <div className="step-title">{step.title}</div>
                   <div className="step-description">{step.desc}</div>
                 </div>
               </div>
             ))}
+            
+            {/* Special Go Live Step with Two Options */}
+            <div className="step-go-live-container">
+              <div className="step-header">
+                <div className="step-number">4</div>
+                <div className="step-title">Go Live</div>
+              </div>
+              
+              <div className="go-live-options">
+                <div className="go-live-option">
+                  <div className="option-icon">
+                    <Monitor size={16} />
+                  </div>
+                  <div className="option-content">
+                    <div className="option-title">VS Code</div>
+                    <div className="option-desc">Launch with Live Server</div>
+                  </div>
+                </div>
+                
+                <div className="option-divider">OR</div>
+                
+                <div className="go-live-option">
+                  <div className="option-icon">
+                    <Terminal size={16} />
+                  </div>
+                  <div className="option-content">
+                    <div className="option-title">Terminal/Bash</div>
+                    <div className="option-desc">.bat(Windows)<br /> .sh(Linux/Mac)</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
+
+        {/* Model Switch Note */}
+        <div className="model-note">
+          <Info size={16} />
+          <p>
+            <strong>Tip:</strong> Try switching between Model 1 and Model 2 if scraping fails with one approach. Each model uses different techniques for better compatibility.
+          </p>
+        </div>
 
         {model === "1" && (
           <div className="note">
             <p>
-              <strong>Note:</strong> Website Scraper works best with light JS websites.
-              {deepMode && " Deep mode will scrape all subpages and linked content."} 
-              {" "}May not work well with complex sites like Netflix, Facebook or GitHub.
-              Try the other model if cloning fails.
+              <strong>Note:</strong> Website Scraper works best with light JS websites. May not work for some sites with dynamic content or network access blocked sites.
+              {deepMode && " Deep mode will scrape all subpages and linked content."}
             </p>
           </div>
         )}
         {model === "2" && (
           <div className="note note-green">
             <p>
-              <strong>Note:</strong> Puppeteer + Cheerio extracts with more accuracy but some images may not appear.
-              Try the other model if cloning fails.
+              <strong>Note:</strong> Puppeteer + Cheerio extracts with more accuracy but may not work for some sites with dynamic content or network access blocked sites.
             </p>
           </div>
         )}
@@ -278,6 +321,35 @@ export default function App() {
               <button className="download-btn" onClick={() => window.open(`${BACKEND_URL}/download/${folderName}`, "_blank")}>
                 <Download size={16}/> Download ZIP
               </button>
+              
+              <div className="instructions-section">
+                <h4 className="instructions-title">🚀 How to Go Live:</h4>
+                <div className="instructions-grid">
+                  <div className="instruction-method">
+                    <h5>Method 1: VS Code Live Server</h5>
+                    <ol>
+                      <li>Extract the ZIP file to a folder</li>
+                      <li>Open VS Code → File → Open Folder</li>
+                      <li>Select the extracted folder</li>
+                      <li>Right-click on <code>index.html</code></li>
+                      <li>Select <strong>"Open with Live Server"</strong></li>
+                    </ol>
+                  </div>
+                  <div className="instruction-method">
+                    <h5>Method 2: Script Files</h5>
+                    <ol>
+                      <li>Extract the ZIP file to a folder</li>
+                      <li>Open the extracted folder</li>
+                      <li><strong>Windows:</strong> Double-click <code>open.bat</code></li>
+                      <li><strong>Mac/Linux:</strong> Open terminal in folder</li>
+                      <li><strong>Mac/Linux:</strong> Run <code>bash open.sh</code></li>
+                    </ol>
+                  </div>
+                </div>
+                <div className="instructions-note">
+                  <p><strong>💡 Pro Tip:</strong> Both methods will automatically open your browser and serve the website locally with live reload capabilities!</p>
+                </div>
+              </div>
             </div>
           )}
         </section>
