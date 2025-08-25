@@ -37,7 +37,7 @@ export class ContentExtractor {
         } catch {}
       });
 
-      await page.goto(url, { waitUntil: ["load"], timeout: 45000 });
+      await page.goto(url, { waitUntil: "domcontentloaded", timeout: 45000 });
       await new Promise(resolve => setTimeout(resolve, 3000));
 
       let html = await page.content();
