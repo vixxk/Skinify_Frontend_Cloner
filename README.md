@@ -12,12 +12,13 @@ May not work for sites with realtime data changes or Network Access Blocked site
 - **Modern React UI**: Clean, mobile responsive, and animated.  
 - **Usage feedback**: Real-time messages for success or errors.  
 - **Example keywords provided**: Quick list of popular websites to try.  
+- **Script files**: `open.sh` / `open.bat` files for automatic launching the scraped site.  
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Backend**: Node.js, Express, Gemini AI, website-scraper, archiver  
+- **Backend**: Node.js, Express, Gemini AI, website-scraper, puppeteer, cheerio, archiver  
 - **Frontend**: React + Vite, Lucide icons, custom CSS-in-JS  
 
 ---
@@ -88,6 +89,9 @@ SKINIFY_FRONTEND_CLONER/
 │   ├── downloads/
 │   ├── node_modules/
 │   ├── content-extractor.js 
+│   ├── open.bat 
+│   ├── open.sh 
+│   ├── puppeteer.config.cjs 
 │   ├── scraper-cli.js
 │   ├── server.js
 │   ├── package.json
@@ -101,20 +105,34 @@ SKINIFY_FRONTEND_CLONER/
 │   ├── package.json
 │   └── vite.config.js
 ```
-
 ---
 
 ## 🔧 API Endpoints
 
-**POST** `/api/resolve`  
-Request:
+**POST** `/api/resolve/1`  
+Request Body:
 ```json
-{ "keyword": "<site/keyword/url>" }
+{ 
+  "keyword": "<site/keyword/url>",
+  "isRecursive": "true" // optional, set to true to recursively scrape links
+}
 ```
 Response:
 ```json
 { "url": "<resolved-url>", "folder": "<asset-folder-name>" }
 ```
+**POST** `/api/resolve/2`  
+Request Body:
+```json
+{ 
+  "keyword": "<site/keyword/url>",
+}
+```
+Response:
+```json
+{ "url": "<resolved-url>", "folder": "<asset-folder-name>" }
+```
+
 
 **GET** `/download/:folderName`  
 Downloads ZIP: All scraped assets for that site.
@@ -125,10 +143,10 @@ Downloads ZIP: All scraped assets for that site.
 
 1. Enter a website name or keyword (e.g., `tailwindcss`, `hitesh.ai`).  
 2. Click **Scrape Website**.  
-3. Download your ZIP, extract locally, and open `index.html`.
+3. Download your ZIP, extract locally, and open `index.html` the launch the Live Server :`Go Live`.
+4. Change the model from top-left if scraping fails from one. 
 
 **Example Keywords**
-
 - hitesh.ai  
 - piyushgarg.dev  
 - tailwindcss.com  
@@ -139,8 +157,6 @@ Downloads ZIP: All scraped assets for that site.
 
 ---
 
-## ⚠️ Notes and Limitations
-
-- Best for static or light JS sites.  
-- May fail on highly dynamic sites (Netflix, Facebook, GitHub).  
+## ⚠️ Notes
 - Only scrapes landing page unless Deep Mode is ON.
+- Deep Mode might timeout due to excess scraping.
