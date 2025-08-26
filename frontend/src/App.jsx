@@ -331,7 +331,7 @@ export default function App() {
                       <li>Extract the ZIP file to a folder</li>
                       <li>Open VS Code → File → Open Folder</li>
                       <li>Select the extracted folder</li>
-                      <li>Right-click on <code>index.html</code></li>
+                      <li>Open <code>index.html</code>→Right Click</li>
                       <li>Select <strong>"Open with Live Server"</strong></li>
                     </ol>
                   </div>
