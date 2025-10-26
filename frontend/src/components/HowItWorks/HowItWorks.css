@@ -281,3 +281,24 @@
     font-size: 11px;
   }
 }
+
+.step-video:hover {
+  background: linear-gradient(
+    95deg, 
+    #fff6ed 0%, 
+    #ffb28833 60%, 
+    #fff0d900 100%
+  );
+  border-color: #ffae88;
+  box-shadow: 0 6px 20px 2px #ffb28822;
+  transform: translateY(-2px) scale(1.03);
+  text-decoration: none;
+}
+.step-video:active {
+  filter: brightness(0.96);
+}
+.step-video .step-number {
+  background: linear-gradient(135deg,#FF4B2B,#ff7c3b);
+  color: #fff !important;
+}
+
