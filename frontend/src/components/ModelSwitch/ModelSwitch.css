@@ -1,0 +1,127 @@
+/* Common button/switch wrapper styling */
+.model-switch-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--primary-purple-light);
+    border: 1px solid var(--primary-purple-border);
+    padding: 8px 14px;
+    border-radius: var(--border-radius-large);
+    backdrop-filter: blur(10px);
+  }
+  
+  /* Common icon styling */
+  .model-icon {
+    color: var(--primary-purple);
+    flex-shrink: 0;
+  }
+  
+  /* Common text styling for switches */
+  .switch-text {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    user-select: none;
+    white-space: nowrap;
+  }
+  
+  /* Common checkbox styling */
+  .switch-checkbox {
+    display: none;
+  }
+  
+  /* Common label styling */
+  .switch-label {
+    position: relative;
+    width: 56px;
+    height: 28px;
+    background: rgba(107, 114, 128, 0.5);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: var(--transition-default);
+    border: 2px solid var(--primary-purple-border);
+  }
+  
+  /* Common slider styling */
+  .switch-slider {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background: #e5e7eb;
+    border-radius: 50%;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Model switch specific styling */
+  .switch-checkbox:checked + .switch-label {
+    background: linear-gradient(135deg, var(--primary-green), var(--primary-green-dark));
+    border-color: var(--primary-green);
+  }
+  
+  .switch-checkbox:checked + .switch-label .switch-slider {
+    transform: translateX(28px);
+    background: #ffffff;
+    box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+  }
+  
+  /* Common label hover effect */
+  .switch-label:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Status text styling */
+  .model-status {
+    font-weight: 700;
+    color: var(--primary-purple);
+    min-width: 12px;
+    text-align: center;
+    user-select: none;
+    font-size: 1rem;
+  }
+  
+  /* Fixed top bars */
+  .fixed-top-bar {
+    position: fixed;
+    top: 1rem;
+    z-index: 1000;
+    background: rgba(24, 19, 68, 0.85);
+    padding: 8px 16px;
+    border-radius: var(--border-radius-xlarge);
+    box-shadow: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    backdrop-filter: blur(10px);
+  }
+  
+  .fixed-top-bar.left {
+    left: 1rem;
+  }
+  
+  @media (max-width: 768px) {
+    .fixed-top-bar {
+      position: static;
+      margin: 1rem;
+      justify-content: center;
+    }
+  
+    .model-switch-wrapper {
+      padding: 6px 12px;
+      gap: 8px;
+    }
+  
+    .switch-text {
+      font-size: 0.9rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .model-switch-wrapper {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
+  

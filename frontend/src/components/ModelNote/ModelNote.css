@@ -1,0 +1,18 @@
+.model-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: var(--primary-blue-light);
+    border: 1px solid var(--primary-blue-border);
+    border-radius: var(--border-radius-medium);
+    padding: 16px;
+    margin-bottom: 2rem;
+    color: var(--primary-blue);
+    font-size: 0.875rem;
+  }
+  
+  .model-note p {
+    margin: 0;
+    line-height: 1.5;
+  }
+  
