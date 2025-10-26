@@ -1,30 +1,28 @@
 /* Messages */
 .message {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 14px 18px;
-    border-radius: var(--border-radius-medium);
-    margin-bottom: 1.2rem;
-    font-size: 1rem;
-    font-weight: 500;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-  
-  .success-message {
-    background: var(--success-color);
-    border: 1px solid var(--success-border);
-    color: var(--primary-green);
-    box-shadow: var(--shadow-success);
-    margin-bottom: 1.3rem;
-  }
-  
-  .error-message {
-    background: var(--error-color);
-    border: 1px solid var(--error-border);
-    color: #ef4444;
-    box-shadow: 0 8px 32px rgba(239, 68, 68, 0.09);
-  }
-  
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-radius: var(--border-radius-medium);
+  margin-bottom: 1.3rem;
+  font-size: 1rem;
+  font-weight: 500;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.success-message {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: var(--success-green);
+  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.12);
+}
+
+.error-message {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: var(--error-red);
+  box-shadow: 0 8px 32px rgba(239, 68, 68, 0.12);
+}

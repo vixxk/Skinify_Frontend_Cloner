@@ -1,69 +1,69 @@
 /* Background elements */
 .bg-element {
-    position: absolute;
-    border-radius: 50%;
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+}
+
+.bg-element-1 {
+  top: 10%;
+  left: 10%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(255, 107, 53, 0.15) 0%, transparent 70%);
+  animation: float1 8s ease-in-out infinite;
+}
+
+.bg-element-2 {
+  top: 60%;
+  right: 10%;
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(255, 140, 66, 0.12) 0%, transparent 70%);
+  animation: float2 10s ease-in-out infinite;
+}
+
+.bg-element-3 {
+  top: 35%;
+  right: 50%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(255, 167, 38, 0.1) 0%, transparent 70%);
+  animation: float3 12s ease-in-out infinite;
+}
+
+@keyframes float1 {
+  0%,
+  100% {
+    transform: translateY(0px) translateX(0px);
   }
-  
-  .bg-element-1 {
-    top: 10%;
-    left: 10%;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, var(--primary-purple-light) 0%, transparent 70%);
-    animation: float1 6s ease-in-out infinite;
+  33% {
+    transform: translateY(-25px) translateX(15px);
   }
-  
-  .bg-element-2 {
-    top: 60%;
-    right: 10%;
-    width: 250px;
-    height: 250px;
-    background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 70%);
-    animation: float2 8s ease-in-out infinite;
+  66% {
+    transform: translateY(15px) translateX(-15px);
   }
-  
-  .bg-element-3 {
-    top: 30%;
-    right: 50%;
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle, rgba(124, 58, 237, 0.08) 0%, transparent 70%);
-    animation: float3 10s ease-in-out infinite;
+}
+
+@keyframes float2 {
+  0%,
+  100% {
+    transform: translateY(0px) translateX(0px);
   }
-  
-  @keyframes float1 {
-    0%,
-    100% {
-      transform: translateY(0px) translateX(0px);
-    }
-    33% {
-      transform: translateY(-20px) translateX(10px);
-    }
-    66% {
-      transform: translateY(10px) translateX(-10px);
-    }
+  50% {
+    transform: translateY(-20px) translateX(-20px);
   }
-  
-  @keyframes float2 {
-    0%,
-    100% {
-      transform: translateY(0px) translateX(0px);
-    }
-    50% {
-      transform: translateY(-15px) translateX(-15px);
-    }
+}
+
+@keyframes float3 {
+  0%,
+  100% {
+    transform: translateY(0px) translateX(0px);
   }
-  
-  @keyframes float3 {
-    0%,
-    100% {
-      transform: translateY(0px) translateX(0px);
-    }
-    25% {
-      transform: translateY(-10px) translateX(15px);
-    }
-    75% {
-      transform: translateY(15px) translateX(-20px);
-    }
+  25% {
+    transform: translateY(-15px) translateX(20px);
   }
-  
+  75% {
+    transform: translateY(20px) translateX(-25px);
+  }
+}

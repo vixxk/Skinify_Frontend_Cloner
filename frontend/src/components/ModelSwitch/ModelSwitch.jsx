@@ -5,19 +5,22 @@ export default function ModelSwitch({ model, setModel }) {
   return (
     <div className="fixed-top-bar left">
       <div className="model-switch-wrapper">
-        <Cpu size={18} className="model-icon" />
-        <span className="switch-text">Model:</span>
-        <input
-          type="checkbox"
-          id="modelToggle"
-          className="switch-checkbox"
-          checked={model === "2"}
-          onChange={(e) => setModel(e.target.checked ? "2" : "1")}
-        />
-        <label htmlFor="modelToggle" className="switch-label">
-          <span className="switch-slider"></span>
-        </label>
-        <span className="model-status">{model === "1" ? "1" : "2"}</span>
+        <Cpu size={20} className="model-icon" />
+        <span className="switch-label-text">Scraping Engine:</span>
+        <div className="model-selector">
+          <button
+            className={`model-option ${model === "website-scraper" ? "active" : ""}`}
+            onClick={() => setModel("website-scraper")}
+          >
+            Website Scraper
+          </button>
+          <button
+            className={`model-option ${model === "puppeteer-cheerio" ? "active" : ""}`}
+            onClick={() => setModel("puppeteer-cheerio")}
+          >
+            Puppeteer + Cheerio
+          </button>
+        </div>
       </div>
     </div>
   );

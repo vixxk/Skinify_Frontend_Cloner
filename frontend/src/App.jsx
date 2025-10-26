@@ -11,6 +11,7 @@ import Message from "./components/Message/Message";
 import ResultSection from "./components/ResultSection/ResultSection";
 import ExamplesSection from "./components/ExamplesSection/ExamplesSection";
 import BackgroundElements from "./components/BackgroundElements/BackgroundElements";
+import FaqSection from "./components/FaqSection/FaqSection";
 
 export default function App() {
   const [keyword, setKeyword] = useState("");
@@ -20,36 +21,23 @@ export default function App() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [deepMode, setDeepMode] = useState(false);
-  const [model, setModel] = useState("1");
+  const [model, setModel] = useState("website-scraper");
 
   // const BACKEND_URL = "http://localhost:3001";
   const BACKEND_URL = "https://skinify-backend-ui4w.onrender.com";
 
-  const defaultWebsitesModel1 = [
+  // Unified website list for both models
+  const defaultWebsites = [
     "hitesh.ai",
     "piyushgarg.dev",
     "code.visualstudio.com",
     "tailwindcss.com",
     "nextjs.org",
-    "en.wikipedia.org",
-    "getbootstrap.com",
-    "w3schools.com",
-    "geeksforgeeks"
-  ];
-
-  const defaultWebsitesModel2 = [
-    "hitesh.ai",
     "vercel.com",
-    "code.visualstudio.com",
-    "razorpay.com",
-    "nextjs.org",
-    "paradox.ai",
-    "docs.chaicode.com",
+    "getbootstrap.com",
     "w3schools.com",
     "react.dev"
   ];
-
-  const defaultWebsites = model === "1" ? defaultWebsitesModel1 : defaultWebsitesModel2;
 
   const handleScrape = async () => {
     if (!keyword.trim()) return setError("Please enter a keyword or URL!");
@@ -64,9 +52,10 @@ export default function App() {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), timeoutDuration);
 
-      const apiUrl = `${BACKEND_URL}/api/resolve/${model}`;
+      const modelNumber = model === "website-scraper" ? "1" : "2";
+      const apiUrl = `${BACKEND_URL}/api/resolve/${modelNumber}`;
       const requestBody =
-        model === "1"
+        model === "website-scraper"
           ? { keyword: keyword.trim(), isRecursive: deepMode }
           : { keyword: keyword.trim() };
 
@@ -87,8 +76,8 @@ export default function App() {
       } else {
         setResolvedURL(data.url);
         setFolderName(data.folder);
-        const modelName = model === "1" ? "website-scraper" : "Puppeteer + Cheerio";
-        const modeText = model === "1" && deepMode ? " (Deep mode)" : " (Landing page only)";
+        const modelName = model === "website-scraper" ? "Website Scraper" : "Puppeteer + Cheerio";
+        const modeText = model === "website-scraper" && deepMode ? " (Deep mode)" : " (Landing page only)";
         setSuccess(`Website scraped successfully using ${modelName}${modeText}`);
       }
     } catch (err) {
@@ -132,7 +121,7 @@ export default function App() {
   return (
     <div className="app">
       <ModelSwitch model={model} setModel={setModel} />
-      {model === "1" && <DeepModeToggle deepMode={deepMode} setDeepMode={setDeepMode} />}
+      {model === "website-scraper" && <DeepModeToggle deepMode={deepMode} setDeepMode={setDeepMode} />}
       <BackgroundElements />
 
       <div className="container">
@@ -140,7 +129,7 @@ export default function App() {
         <HowItWorks />
         <ModelNote />
 
-        {model === "1" && (
+        {model === "website-scraper" && (
           <div className="note">
             <p>
               <strong>Note:</strong> Website Scraper works best with light JS websites. May not work
@@ -149,8 +138,8 @@ export default function App() {
             </p>
           </div>
         )}
-        {model === "2" && (
-          <div className="note note-green">
+        {model === "puppeteer-cheerio" && (
+          <div className="note note-orange">
             <p>
               <strong>Note:</strong> Puppeteer + Cheerio extracts with more accuracy but may not
               work for some sites with dynamic content or network access blocked sites.
@@ -187,6 +176,8 @@ export default function App() {
           setKeyword={setKeyword}
           copyToClipboard={copyToClipboard}
         />
+
+        <FaqSection />
       </div>
     </div>
   );

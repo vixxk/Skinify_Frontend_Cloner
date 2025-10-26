@@ -1,30 +1,27 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap");
 
-/* CSS Variables for consistent theming */
+/* CSS Variables for Black & Orange Theme */
 :root {
-  --primary-purple: #8b5cf6;
-  --primary-purple-dark: #a855f7;
-  --primary-purple-light: rgba(139, 92, 246, 0.1);
-  --primary-purple-border: rgba(139, 92, 246, 0.2);
-  --primary-green: #10b981;
-  --primary-green-dark: #059669;
-  --primary-blue: #60a5fa;
-  --primary-blue-light: rgba(59, 130, 246, 0.1);
-  --primary-blue-border: rgba(59, 130, 246, 0.2);
-  --success-color: rgba(16, 185, 129, 0.15);
-  --success-border: rgba(16, 185, 129, 0.32);
-  --error-color: rgba(239, 68, 68, 0.12);
-  --error-border: rgba(239, 68, 68, 0.28);
-  --yellow-color: rgba(251, 191, 36, 0.1);
-  --yellow-border: rgba(251, 191, 36, 0.2);
-  --text-primary: #e2e8f0;
-  --text-secondary: #a1a1aa;
-  --text-muted: #6b7280;
-  --bg-overlay: rgba(255, 255, 255, 0.05);
-  --bg-overlay-hover: rgba(255, 255, 255, 0.08);
+  --primary-orange: #ff6b35;
+  --primary-orange-dark: #ff8c42;
+  --primary-orange-light: rgba(255, 107, 53, 0.1);
+  --primary-orange-border: rgba(255, 107, 53, 0.25);
+  --accent-orange: #ffa726;
+  --success-green: #10b981;
+  --success-green-dark: #059669;
+  --error-red: #ef4444;
+  --text-primary: #ffffff;
+  --text-secondary: #d1d5db;
+  --text-muted: #9ca3af;
+  --bg-black: #0a0a0a;
+  --bg-dark: #1a1a1a;
+  --bg-darker: #121212;
+  --bg-overlay: rgba(255, 255, 255, 0.03);
+  --bg-overlay-hover: rgba(255, 255, 255, 0.06);
   --border-light: rgba(255, 255, 255, 0.1);
-  --shadow-light: 0 8px 32px rgba(139, 92, 246, 0.3);
-  --shadow-success: 0 8px 32px rgba(52, 211, 153, 0.13);
+  --border-orange: rgba(255, 107, 53, 0.3);
+  --shadow-orange: 0 8px 32px rgba(255, 107, 53, 0.25);
+  --shadow-success: 0 8px 32px rgba(16, 185, 129, 0.15);
   --transition-default: all 0.3s ease;
   --border-radius-small: 8px;
   --border-radius-medium: 12px;
@@ -38,20 +35,20 @@
   height: 12px;
 }
 ::-webkit-scrollbar-track {
-  background: #1a1a2e;
+  background: var(--bg-darker);
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, var(--primary-purple), var(--primary-purple-dark));
+  background: linear-gradient(135deg, var(--primary-orange), var(--primary-orange-dark));
   border-radius: var(--border-radius-small);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, var(--primary-purple-dark), #ec4899);
+  background: linear-gradient(135deg, var(--primary-orange-dark), var(--accent-orange));
 }
 
 /* Basic app container */
 .app {
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+  background: linear-gradient(135deg, var(--bg-black) 0%, var(--bg-darker) 50%, #0d0d0d 100%);
   color: var(--text-primary);
   font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
   position: relative;
@@ -63,25 +60,28 @@
   position: relative;
   z-index: 10;
   padding: 2rem;
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
 /* Notes */
 .note {
-  background: var(--yellow-color);
-  border: 1px solid var(--yellow-border);
+  background: rgba(255, 193, 7, 0.08);
+  border: 1px solid rgba(255, 193, 7, 0.2);
   border-radius: var(--border-radius-medium);
-  padding: 1rem;
+  padding: 1rem 1.25rem;
   margin-bottom: 2rem;
-  color: #fbbf24;
+  color: #ffc107;
   font-size: 0.875rem;
+  line-height: 1.6;
+  box-shadow: 0 4px 16px rgba(255, 193, 7, 0.08);
 }
 
-.note-green {
-  background: rgba(34, 197, 94, 0.1);
-  border-color: rgba(34, 197, 94, 0.2);
-  color: #22c55e;
+.note-orange {
+  background: rgba(255, 107, 53, 0.08);
+  border-color: rgba(255, 107, 53, 0.2);
+  color: var(--primary-orange);
+  box-shadow: 0 4px 16px rgba(255, 107, 53, 0.08);
 }
 
 /* Responsive Design */

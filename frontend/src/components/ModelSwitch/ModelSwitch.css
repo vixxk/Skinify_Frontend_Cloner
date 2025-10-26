@@ -1,127 +1,134 @@
-/* Common button/switch wrapper styling */
+/* Model Switch Wrapper */
 .model-switch-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: var(--primary-purple-light);
-    border: 1px solid var(--primary-purple-border);
-    padding: 8px 14px;
-    border-radius: var(--border-radius-large);
-    backdrop-filter: blur(10px);
-  }
-  
-  /* Common icon styling */
-  .model-icon {
-    color: var(--primary-purple);
-    flex-shrink: 0;
-  }
-  
-  /* Common text styling for switches */
-  .switch-text {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    user-select: none;
-    white-space: nowrap;
-  }
-  
-  /* Common checkbox styling */
-  .switch-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-light);
+  padding: 10px 16px;
+  border-radius: var(--border-radius-large);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+.model-icon {
+  color: var(--primary-orange);
+  flex-shrink: 0;
+}
+
+.switch-label-text {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  user-select: none;
+  white-space: nowrap;
+}
+
+/* Model Selector */
+.model-selector {
+  display: flex;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 4px;
+  border-radius: var(--border-radius-medium);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.model-option {
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: transparent;
+  color: var(--text-muted);
+  border: none;
+  border-radius: var(--border-radius-small);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+}
+
+.model-option::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, var(--primary-orange), var(--primary-orange-dark));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.model-option:hover:not(.active) {
+  color: var(--text-primary);
+  background: rgba(255, 107, 53, 0.1);
+}
+
+.model-option.active {
+  color: #ffffff;
+  position: relative;
+  z-index: 1;
+}
+
+.model-option.active::before {
+  opacity: 1;
+}
+
+/* Fixed top bars */
+.fixed-top-bar {
+  position: fixed;
+  top: 1.25rem;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fixed-top-bar.left {
+  left: 1.25rem;
+}
+
+@media (max-width: 1024px) {
+  .switch-label-text {
     display: none;
   }
-  
-  /* Common label styling */
-  .switch-label {
-    position: relative;
-    width: 56px;
-    height: 28px;
-    background: rgba(107, 114, 128, 0.5);
-    border-radius: 14px;
-    cursor: pointer;
-    transition: var(--transition-default);
-    border: 2px solid var(--primary-purple-border);
-  }
-  
-  /* Common slider styling */
-  .switch-slider {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 20px;
-    height: 20px;
-    background: #e5e7eb;
-    border-radius: 50%;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
-  
-  /* Model switch specific styling */
-  .switch-checkbox:checked + .switch-label {
-    background: linear-gradient(135deg, var(--primary-green), var(--primary-green-dark));
-    border-color: var(--primary-green);
-  }
-  
-  .switch-checkbox:checked + .switch-label .switch-slider {
-    transform: translateX(28px);
-    background: #ffffff;
-    box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
-  }
-  
-  /* Common label hover effect */
-  .switch-label:hover {
-    transform: scale(1.05);
-  }
-  
-  /* Status text styling */
-  .model-status {
-    font-weight: 700;
-    color: var(--primary-purple);
-    min-width: 12px;
-    text-align: center;
-    user-select: none;
-    font-size: 1rem;
-  }
-  
-  /* Fixed top bars */
+}
+
+@media (max-width: 768px) {
   .fixed-top-bar {
-    position: fixed;
-    top: 1rem;
-    z-index: 1000;
-    background: rgba(24, 19, 68, 0.85);
-    padding: 8px 16px;
-    border-radius: var(--border-radius-xlarge);
-    box-shadow: none;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    backdrop-filter: blur(10px);
+    position: static;
+    margin: 1rem;
+    justify-content: center;
   }
-  
-  .fixed-top-bar.left {
-    left: 1rem;
+
+  .model-switch-wrapper {
+    padding: 8px 12px;
+    gap: 10px;
+    flex-direction: column;
   }
-  
-  @media (max-width: 768px) {
-    .fixed-top-bar {
-      position: static;
-      margin: 1rem;
-      justify-content: center;
-    }
-  
-    .model-switch-wrapper {
-      padding: 6px 12px;
-      gap: 8px;
-    }
-  
-    .switch-text {
-      font-size: 0.9rem;
-    }
+
+  .switch-label-text {
+    display: block;
+    font-size: 0.85rem;
   }
-  
-  @media (max-width: 480px) {
-    .model-switch-wrapper {
-      flex-wrap: wrap;
-      justify-content: center;
-    }
+
+  .model-selector {
+    width: 100%;
   }
-  
+
+  .model-option {
+    flex: 1;
+    padding: 10px 12px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .model-option {
+    font-size: 0.75rem;
+    padding: 8px 10px;
+  }
+}

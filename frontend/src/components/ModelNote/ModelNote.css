@@ -1,18 +1,60 @@
-.model-note {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    background: var(--primary-blue-light);
-    border: 1px solid var(--primary-blue-border);
-    border-radius: var(--border-radius-medium);
-    padding: 16px;
-    margin-bottom: 2rem;
-    color: var(--primary-blue);
-    font-size: 0.875rem;
+.model-note-pro {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  background: rgba(255, 107, 53, 0.09);
+  border: 1.5px solid rgba(255, 107, 53, 0.15);
+  border-radius: 16px;
+  padding: 18px 26px;
+  margin-bottom: 2rem;
+  color: var(--text-primary);
+  box-shadow: 0 4px 24px rgba(255, 107, 53, 0.07);
+}
+
+.model-note-icon {
+  flex-shrink: 0;
+  background: linear-gradient(135deg, var(--primary-orange), var(--primary-orange-dark));
+  color: #fff;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 16px rgba(255, 107, 53, 0.13);
+}
+
+.model-note-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+}
+
+.model-note-content p {
+  margin: 0;
+  font-size: 1.06rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.model-highlight {
+  color: var(--primary-orange);
+  font-weight: 700;
+  margin: 0 5px;
+}
+
+@media (max-width: 600px) {
+  .model-note-pro {
+    flex-direction: column;
+    gap: 10px;
+    padding: 13px 10px;
   }
-  
-  .model-note p {
-    margin: 0;
-    line-height: 1.5;
+  .model-note-icon {
+    width: 34px;
+    height: 34px;
   }
-  
+  .model-note-content p {
+    font-size: 0.97rem;
+  }
+}

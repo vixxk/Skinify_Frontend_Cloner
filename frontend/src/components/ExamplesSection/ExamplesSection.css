@@ -1,99 +1,124 @@
 /* Examples section */
 .examples-section {
-    background: var(--bg-overlay);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--border-light);
-    border-radius: var(--border-radius-xlarge);
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-light);
+  border-radius: var(--border-radius-xlarge);
+  padding: 2.5rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+.examples-title {
+  color: var(--primary-orange);
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.examples-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+
+.example-card {
+  background: rgba(255, 107, 53, 0.05);
+  border: 1px solid rgba(255, 107, 53, 0.2);
+  border-radius: var(--border-radius-large);
+  padding: 1.1rem 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: var(--transition-default);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.example-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 107, 53, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.example-card:hover::before {
+  left: 100%;
+}
+
+.example-card:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 107, 53, 0.1);
+  box-shadow: 0 10px 35px rgba(255, 107, 53, 0.25);
+  border-color: var(--primary-orange);
+}
+
+.site-name {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.copy-btn {
+  background: var(--primary-orange);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--border-radius-small);
+  padding: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.2);
+}
+
+.copy-btn:hover {
+  background: var(--accent-orange);
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(255, 107, 53, 0.3);
+}
+
+/* Copy notification */
+.copy-notification {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  background: linear-gradient(135deg, var(--primary-orange), var(--primary-orange-dark));
+  color: white;
+  padding: 14px 20px;
+  border-radius: var(--border-radius-medium);
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 8px 32px rgba(255, 107, 53, 0.4);
+  z-index: 1000;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .examples-section {
     padding: 2rem;
-    margin-bottom: 2rem;
-    width: 100%;
-    box-sizing: border-box;
   }
-  
-  .examples-title {
-    color: var(--primary-purple);
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    text-align: center;
-  }
-  
+
   .examples-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
+    grid-template-columns: 1fr;
   }
-  
-  .example-card {
-    background: var(--primary-purple-light);
-    border: 1px solid var(--primary-purple-border);
-    border-radius: var(--border-radius-large);
-    padding: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    transition: var(--transition-default);
-    cursor: pointer;
-  }
-  
-  .example-card:hover {
-    transform: translateY(-2px);
-    background: rgba(139, 92, 246, 0.15);
-    box-shadow: 0 8px 32px rgba(139, 92, 246, 0.2);
-  }
-  
-  .site-name {
-    color: var(--text-primary);
-    font-weight: 500;
-    font-size: 0.9rem;
-  }
-  
-  .copy-btn {
-    background: var(--primary-purple);
-    color: #ffffff;
-    border: none;
-    border-radius: var(--border-radius-small);
-    padding: 6px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    transition: all 0.2s ease;
-  }
-  
-  .copy-btn:hover {
-    background: #7c3aed;
-  }
-  
-  /* Copy notification */
-  .copy-notification {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: rgba(139, 92, 246, 0.9);
-    color: white;
-    padding: 12px 16px;
-    border-radius: var(--border-radius-small);
-    font-size: 0.875rem;
-    font-weight: 500;
-    box-shadow: var(--shadow-light);
-    z-index: 1000;
-    animation: slideIn 0.3s ease-out;
-  }
-  
-  @keyframes slideIn {
-    from {
-      transform: translateX(100%);
-      opacity: 0;
-    }
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .examples-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-  
+}

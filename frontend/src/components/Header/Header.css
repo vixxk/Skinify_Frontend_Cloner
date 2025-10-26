@@ -1,45 +1,64 @@
 /* Header */
 .header.skinify-header {
-    text-align: center;
-    margin-bottom: 3rem;
-    user-select: none;
-  }
-  
-  .logo-section {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    margin-bottom: 1rem;
-  }
-  
-  .logo-icon {
-    background: linear-gradient(135deg, var(--primary-purple), var(--primary-purple-dark));
-    padding: 12px;
-    border-radius: var(--border-radius-large);
-    box-shadow: var(--shadow-light);
-  }
-  
+  text-align: center;
+  margin-bottom: 3rem;
+  user-select: none;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 1rem;
+}
+
+.logo-icon {
+  background: linear-gradient(135deg, var(--primary-orange), var(--primary-orange-dark));
+  padding: 14px;
+  border-radius: var(--border-radius-large);
+  box-shadow: var(--shadow-orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-default);
+}
+
+.logo-icon:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 40px rgba(255, 107, 53, 0.35);
+}
+
+.title {
+  font-size: 3.8rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--primary-orange), var(--accent-orange), #ffb74d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+  letter-spacing: -0.02em;
+  text-shadow: 0 0 40px rgba(255, 107, 53, 0.3);
+}
+
+.subtitle {
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
   .title {
-    font-size: 3.5rem;
-    font-weight: 900;
-    background: linear-gradient(135deg, var(--primary-purple), var(--primary-purple-dark), #ec4899);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin: 0;
-    letter-spacing: -0.02em;
+    font-size: 2.5rem;
   }
   
   .subtitle {
-    font-size: 1.25rem;
-    color: var(--text-secondary);
-    margin-bottom: 1rem;
-    font-weight: 500;
+    font-size: 1rem;
   }
   
-  @media (max-width: 768px) {
-    .title {
-      font-size: 2.5rem;
-    }
+  .logo-icon {
+    padding: 12px;
   }
-  
+}
