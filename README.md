@@ -47,7 +47,7 @@ cd SKINIFY_FRONTEND_CLONER
 
 # Install backend dependencies
 cd backend
-npm install
+npm install && npx puppeteer browsers install chrome
 
 # Install frontend dependencies
 cd ../frontend

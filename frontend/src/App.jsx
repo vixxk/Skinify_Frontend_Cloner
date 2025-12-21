@@ -91,7 +91,7 @@ export default function App() {
         );
       } else if (err.message.includes("HTTP error")) {
         setError(
-          "Server error occurred during scraping. The backend memory might be full. Please try again after 2 minutes."
+          "Server error occurred during scraping. If you are typing keywords, try giving the full URL instead. The backend memory might be full. Please try again after 2 minutes."
         );
       } else {
         setError("Cannot connect to server. Please check if the backend is running.");
