@@ -12,6 +12,10 @@ const openai = new OpenAI({
   baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/',
 });
 
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+let lastApiCallTime = 0;
+const MIN_TIME_BETWEEN_CALLS = 2000; 
+
 function getUniqueFolderName(basePath, baseName) {
   let folderName = baseName;
   let counter = 1;
@@ -66,33 +70,78 @@ export async function scrapeWebsiteByScraper(websiteURL,isRecursive = false) {
 }
 
 export async function resolveWebsiteURL(keyword) {
-  try {
-    const response = await openai.chat.completions.create({
-      model: 'gemini-2.0-flash',
-      messages: [
-        {
-          role: 'system',
-          content: `You are a very smart helpful assistant that only returns the official homepage URL for a given company, product, or service for the given keyword.
-          Return only the URL, nothing else.Check if the given prompt is a valid URL itself then no need to find,just return it.
-          If the given prompt is not a valid URL, then find the most relevant URL for the given keyword and return it.
-          For example : Given prompt is piyushgarg.dev then add https://www. in front of the url and return it.
-          For example : Given prompt is google.com then return it as it is.
-          For example : Given prompt is lenovo search for the official website URL, you should perform searching on the given keyword if you ain't able to find the website URL.`,
-        },
-        { 
-          role: 'user', 
-          content: `Give me the official website URL for: "${keyword}" or try to find the most relevant website's URL for: ${keyword}` 
-        },
-      ],
-    });
-
-    const answer = response.choices[0].message.content.trim();
-    const match = answer.match(/https?:\/\/[^\s"]+/); //Extract the website URL from AI's Response
-    return match ? match[0] : null; //Only the first URL
-  } catch (error) {
-    console.error('Error resolving website URL:', error);
-    return null;
+  // Check if input is already a valid URL
+  const urlPattern = /^(https?:\/\/)?([\w\-]+\.)+[\w\-]+(\/.*)?$/i;
+  if (urlPattern.test(keyword)) {
+    // If it starts with http/https, return as is
+    if (keyword.startsWith('http://') || keyword.startsWith('https://')) {
+      console.log('Valid URL detected, using directly:', keyword);
+      return keyword;
+    }
+    // If it's a domain without protocol, add https://
+    const url = `https://${keyword}`;
+    console.log('Domain detected, adding protocol:', url);
+    return url;
   }
+
+  const now = Date.now();
+  const timeSinceLastCall = now - lastApiCallTime;
+  if (timeSinceLastCall < MIN_TIME_BETWEEN_CALLS) {
+    const waitTime = MIN_TIME_BETWEEN_CALLS - timeSinceLastCall;
+    console.log(`Rate limiting: waiting ${waitTime}ms before API call...`);
+    await delay(waitTime);
+  }
+
+  let retries = 3;
+  let retryDelay = 5000; 
+
+  while (retries > 0) {
+    try {
+      lastApiCallTime = Date.now();
+      
+      const response = await openai.chat.completions.create({
+        model: 'gemini-2.0-flash',
+        messages: [
+          {
+            role: 'system',
+            content: `You are a helpful assistant that returns only the official homepage URL for a given company, product, or service.
+            Return ONLY the URL, nothing else. No explanation, no additional text.
+            Examples:
+            - Input: "google" -> Output: https://www.google.com
+            - Input: "github" -> Output: https://github.com
+            - Input: "tesla" -> Output: https://www.tesla.com`,
+          },
+          { 
+            role: 'user', 
+            content: `Website URL for: ${keyword}` 
+          },
+        ],
+        max_tokens: 100,
+        temperature: 0.3,
+      });
+
+      const answer = response.choices[0].message.content.trim();
+      const match = answer.match(/https?:\/\/[^\s"]+/); //Extract the website URL from AI's Response
+      return match ? match[0] : null; //Only the first URL
+    } catch (error) {
+      if (error.status === 429) {
+        retries--;
+        if (retries > 0) {
+          console.log(`Rate limit hit. Retrying in ${retryDelay/1000} seconds... (${retries} retries left)`);
+          await delay(retryDelay);
+          retryDelay *= 2; 
+        } else {
+          console.error('Rate limit exceeded. Please wait a minute and try again.');
+          throw new Error('Rate limit exceeded. Please try again in a minute.');
+        }
+      } else {
+        console.error('Error resolving website URL:', error);
+        throw error;
+      }
+    }
+  }
+  
+  return null;
 }
 
 export async function scrapeWebsiteByPuppeteer(websiteURL) {
