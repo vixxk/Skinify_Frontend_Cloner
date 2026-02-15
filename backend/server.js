@@ -13,6 +13,11 @@ app.use(cors());
 
 app.use(bodyParser.json());
 
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
+});
+
+
 app.post("/api/resolve/1", async (req, res) => {
   const { keyword,isRecursive } = req.body;
   if (!keyword) return res.status(400).json({ error: "Keyword missing" });
