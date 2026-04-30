@@ -24,7 +24,7 @@ export default function App() {
   const [model, setModel] = useState("website-scraper");
 
   // const BACKEND_URL = "http://localhost:3001";
-  const BACKEND_URL = "https://skinify-backend-ui4w.onrender.com";
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://skinify-backend-ui4w.onrender.com";
 
   // Unified website list for both models
   const defaultWebsites = [
