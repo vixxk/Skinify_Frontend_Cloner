@@ -1,123 +1,127 @@
-/* Result section specific */
 .result-section {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--border-light);
-  border-radius: var(--border-radius-large);
-  padding: 2rem;
-  margin-bottom: 2rem;
-  backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  padding: 24px;
   width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  margin-bottom: 0.8rem;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
 }
 
 .resolved-url {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 1.25rem;
-  font-size: 0.95rem;
-  padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: var(--border-radius-medium);
-  border: 1px solid var(--border-light);
+  gap: 12px;
+  background-color: #111424;
+  border: 1px solid var(--color-border);
+  padding: 14px 16px;
+}
+
+.url-icon {
+  color: var(--color-accent);
 }
 
 .url-label {
-  color: var(--text-secondary);
-  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-accent);
 }
 
 .url-link {
-  color: var(--primary-orange);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--color-text);
   text-decoration: none;
-  font-weight: 600;
-  transition: var(--transition-default);
+  word-break: break-all;
 }
 
 .url-link:hover {
   text-decoration: underline;
-  color: var(--accent-orange);
+  color: var(--color-accent);
 }
 
+/* Download button */
 .download-btn {
-  padding: 14px 28px;
-  font-size: 1rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, var(--success-green-dark), var(--success-green));
-  color: #ffffff;
+  background-color: var(--color-accent);
+  color: var(--color-base);
   border: none;
-  border-radius: var(--border-radius-medium);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 16px;
   cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
-  transition: var(--transition-default);
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.25);
+  transition: background-color 100ms ease;
+  width: 100%;
+  outline: none;
 }
 
 .download-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.35);
+  background-color: #99ee00;
 }
 
-/* Instructions Section */
 .instructions-section {
-  margin-top: 28px;
-  padding: 28px;
-  background: linear-gradient(135deg, rgba(255, 107, 53, 0.06), rgba(255, 140, 66, 0.04));
-  border-radius: var(--border-radius-large);
-  border: 1px solid rgba(255, 107, 53, 0.2);
-  backdrop-filter: blur(10px);
+  margin-top: 12px;
+  border: 1px solid var(--color-border);
+  padding: 20px;
 }
 
 .instructions-title {
-  margin: 0 0 24px 0;
-  color: var(--primary-orange);
-  font-size: 19px;
-  font-weight: 800;
   display: flex;
   align-items: center;
   gap: 10px;
+  font-family: var(--font-headings);
+  font-size: 0.95rem;
+  color: #FFFFFF;
+  margin-bottom: 20px;
+}
+
+.instruction-header-icon {
+  color: var(--color-accent);
 }
 
 .instructions-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  margin-bottom: 20px;
+  gap: 20px;
 }
 
 .instruction-method {
-  background: rgba(255, 255, 255, 0.95);
-  padding: 22px;
-  border-radius: var(--border-radius-medium);
-  border: 1px solid rgba(255, 107, 53, 0.15);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  background-color: #111424;
+  border: 1px solid var(--color-border);
+  padding: 18px;
 }
 
 .instruction-method h5 {
-  margin: 0 0 14px 0;
-  color: #1a1a1a;
-  font-size: 16px;
-  font-weight: 700;
-  padding-bottom: 10px;
-  border-bottom: 2px solid var(--primary-orange);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-headings);
+  font-size: 0.85rem;
+  color: #FFFFFF;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.method-icon {
+  color: var(--color-accent);
 }
 
 .instruction-method ol {
-  margin: 0;
-  padding-left: 20px;
-  font-size: 13px;
-  line-height: 1.8;
-  color: #333;
+  padding-left: 18px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: #888888;
+  line-height: 1.6;
 }
 
 .instruction-method li {
-  margin-bottom: 8px;
-  position: relative;
+  margin-bottom: 6px;
 }
 
 .instruction-method li:last-child {
@@ -125,55 +129,15 @@
 }
 
 .instruction-method code {
-  background: rgba(255, 107, 53, 0.12);
-  color: #d84315;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-family: "JetBrains Mono", "Fira Code", "Courier New", monospace;
-  font-size: 12px;
-  font-weight: 600;
-  border: 1px solid rgba(255, 107, 53, 0.2);
-}
-
-.instructions-note {
-  background: rgba(16, 185, 129, 0.1);
-  border: 1px solid rgba(16, 185, 129, 0.25);
-  border-radius: var(--border-radius-small);
-  padding: 14px 18px;
-}
-
-.instructions-note p {
-  margin: 0;
-  font-size: 13px;
-  color: var(--success-green);
-  line-height: 1.6;
-  font-weight: 500;
+  background-color: #07080F;
+  color: var(--color-accent);
+  padding: 2px 6px;
+  border: 1px solid var(--color-border);
 }
 
 @media (max-width: 768px) {
   .instructions-grid {
     grid-template-columns: 1fr;
-    gap: 18px;
-  }
-
-  .instructions-section {
-    padding: 22px 18px;
-  }
-
-  .instructions-title {
-    font-size: 17px;
-  }
-
-  .instruction-method {
-    padding: 18px;
-  }
-
-  .instruction-method h5 {
-    font-size: 15px;
-  }
-
-  .instruction-method ol {
-    font-size: 12px;
-    padding-left: 18px;
+    gap: 16px;
   }
 }

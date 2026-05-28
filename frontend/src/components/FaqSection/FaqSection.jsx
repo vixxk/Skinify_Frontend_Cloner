@@ -49,36 +49,38 @@ export default function FaqSection() {
 
   return (
     <section className="faq-section">
-      <h2 className="faq-title">Frequently Asked Questions</h2>
+      <span className="section-label">// SYSTEM DOCS</span>
       <div className="faq-list">
-        {faqList.map((item, idx) => (
-          <div
-            className={`faq-block ${openIdx === idx ? "open" : ""}`}
-            key={idx}
-          >
-            <button
-              className="faq-q"
-              onClick={() => setOpenIdx(openIdx === idx ? null : idx)}
-              aria-expanded={openIdx === idx}
-            >
-              {item.q}
-              <span className={`faq-arrow ${openIdx === idx ? "open" : ""}`}>
-                ▶
-              </span>
-            </button>
-
+        {faqList.map((item, idx) => {
+          const isOpen = openIdx === idx;
+          return (
             <div
-              className={`faq-a-wrapper ${openIdx === idx ? "visible" : ""}`}
-              style={
-                openIdx === idx
-                  ? { maxHeight: "500px", opacity: 1 }
-                  : { maxHeight: 0, opacity: 0 }
-              }
+              className={`faq-block ${isOpen ? "open" : ""}`}
+              key={idx}
             >
-              <div className="faq-a">{item.a}</div>
+              <button
+                className="faq-q"
+                onClick={() => setOpenIdx(isOpen ? null : idx)}
+                aria-expanded={isOpen}
+                type="button"
+              >
+                <span className="faq-q-text">{item.q}</span>
+                <span className="faq-toggle-icon">
+                  {isOpen ? "[–]" : "[+]"}
+                </span>
+              </button>
+
+              <div
+                className="faq-a-wrapper"
+                style={{
+                  maxHeight: isOpen ? "500px" : "0px",
+                }}
+              >
+                <div className="faq-a">{item.a}</div>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

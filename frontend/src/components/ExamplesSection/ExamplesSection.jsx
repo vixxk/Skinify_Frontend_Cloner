@@ -1,24 +1,36 @@
-import { Copy } from "lucide-react";
 import "./ExamplesSection.css";
 
 export default function ExamplesSection({ defaultWebsites, setKeyword, copyToClipboard }) {
   return (
     <section className="examples-section">
-      <h3 className="examples-title">Try these popular websites</h3>
+      <span className="section-label">// RECENT TARGETS</span>
       <div className="examples-grid">
         {defaultWebsites.map((site) => (
-          <div key={site} className="example-card" onClick={() => setKeyword(`https://${site}`)}>
+          <button
+            key={site}
+            className="example-card"
+            onClick={() => setKeyword(`https://${site}`)}
+            type="button"
+          >
             <span className="site-name">{site}</span>
-            <button
-              className="copy-btn"
+            <span
+              className="copy-tag"
               onClick={(e) => {
                 e.stopPropagation();
                 copyToClipboard(`https://${site}`);
               }}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.stopPropagation();
+                  copyToClipboard(`https://${site}`);
+                }
+              }}
             >
-              <Copy size={14} />
-            </button>
-          </div>
+              [COPY]
+            </span>
+          </button>
         ))}
       </div>
     </section>

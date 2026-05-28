@@ -1,6 +1,5 @@
 import { useState } from "react";
 import "./App.css";
-import Header from "./components/Header/Header";
 import ModelSwitch from "./components/ModelSwitch/ModelSwitch";
 import DeepModeToggle from "./components/DeepModeToggle/DeepModeToggle";
 import HowItWorks from "./components/HowItWorks/HowItWorks";
@@ -23,10 +22,8 @@ export default function App() {
   const [deepMode, setDeepMode] = useState(false);
   const [model, setModel] = useState("website-scraper");
 
-  // const BACKEND_URL = "http://localhost:3001";
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://skinify-backend-ui4w.onrender.com";
 
-  // Unified website list for both models
   const defaultWebsites = [
     "hitesh.ai",
     "piyushgarg.dev",
@@ -109,7 +106,7 @@ export default function App() {
     try {
       await navigator.clipboard.writeText(text);
       const notification = document.createElement("div");
-      notification.textContent = `Copied: ${text}`;
+      notification.textContent = `COPIED TO CLIPBOARD: ${text}`;
       notification.className = "copy-notification";
       document.body.appendChild(notification);
       setTimeout(() => notification.remove(), 2000);
@@ -120,56 +117,71 @@ export default function App() {
 
   return (
     <div className="app">
-      <ModelSwitch model={model} setModel={setModel} />
-      {model === "website-scraper" && <DeepModeToggle deepMode={deepMode} setDeepMode={setDeepMode} />}
       <BackgroundElements />
 
-      <div className="container">
-        <Header />
-        <HowItWorks />
+      {/* Control Panel Sidebar */}
+      <aside className="sidebar">
+        <div className="brand-logo-container">
+          <div className="brand-hexagon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <polygon points="12 2 21 7.2 21 16.8 12 22 3 16.8 3 7.2" />
+            </svg>
+          </div>
+          <h1 className="brand-name">skinify</h1>
+        </div>
+
+        <div className="sidebar-section">
+          <ModelSwitch model={model} setModel={setModel} />
+        </div>
+
+        <div className="sidebar-section" style={{ opacity: model === "website-scraper" ? 1 : 0.4, transition: "opacity 150ms" }}>
+          <DeepModeToggle 
+            deepMode={model === "website-scraper" ? deepMode : false} 
+            setDeepMode={model === "website-scraper" ? setDeepMode : () => {}} 
+          />
+        </div>
+
+        <div className="sidebar-section">
+          {model === "website-scraper" ? (
+            <div className="note-container">
+              // ENGINE PARAMS:<br />
+              <strong>WEBSITE SCRAPER</strong> works best on light/static JS files. Captures full linked tree assets when <strong>DEEP MODE</strong> is active.
+            </div>
+          ) : (
+            <div className="note-container">
+              // ENGINE PARAMS:<br />
+              <strong>PUPPETEER + CHEERIO</strong> leverages automated chromium rendering. Optimized for accurate static content extract protocols.
+            </div>
+          )}
+        </div>
+      </aside>
+
+      {/* Workspace Panel */}
+      <main className="workspace">
         <ModelNote />
 
-        {model === "website-scraper" && (
-          <div className="note">
-            <p>
-              <strong>Note:</strong> Website Scraper works best with light JS websites. May not work
-              for some sites with dynamic content or network access blocked sites.
-              {deepMode && " Deep mode will scrape all subpages and linked content."}
-            </p>
-          </div>
-        )}
-        {model === "puppeteer-cheerio" && (
-          <div className="note note-orange">
-            <p>
-              <strong>Note:</strong> Puppeteer + Cheerio extracts with more accuracy but may not
-              work for some sites with dynamic content or network access blocked sites.
-            </p>
-          </div>
-        )}
-
-        <section className="input-section">
+        <div className="workspace-console-section">
+          <span className="section-label">// Scraping Console</span>
           <SearchInput
             keyword={keyword}
             setKeyword={setKeyword}
             loading={loading}
             handleScrape={handleScrape}
             handleKeyPress={handleKeyPress}
-            model={model}
-            deepMode={deepMode}
           />
+        </div>
 
-          {loading && <LoadingProgress />}
-          {error && <Message type="error" message={error} />}
-          {success && <Message type="success" message={success} />}
+        {loading && <LoadingProgress />}
+        {error && <Message type="error" message={error} />}
+        {success && <Message type="success" message={success} />}
 
-          {resolvedURL && folderName && (
-            <ResultSection
-              resolvedURL={resolvedURL}
-              folderName={folderName}
-              BACKEND_URL={BACKEND_URL}
-            />
-          )}
-        </section>
+        {resolvedURL && folderName && (
+          <ResultSection
+            resolvedURL={resolvedURL}
+            folderName={folderName}
+            BACKEND_URL={BACKEND_URL}
+          />
+        )}
 
         <ExamplesSection
           defaultWebsites={defaultWebsites}
@@ -177,8 +189,10 @@ export default function App() {
           copyToClipboard={copyToClipboard}
         />
 
+        <HowItWorks />
+
         <FaqSection />
-      </div>
+      </main>
     </div>
   );
 }

@@ -1,28 +1,22 @@
-/* Messages */
 .message {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 16px 20px;
-  border-radius: var(--border-radius-medium);
-  margin-bottom: 1.3rem;
-  font-size: 1rem;
-  font-weight: 500;
+  padding: 14px 18px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
   width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
 }
 
 .success-message {
-  background: rgba(16, 185, 129, 0.1);
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  color: var(--success-green);
-  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.12);
+  background-color: rgba(170, 255, 0, 0.05);
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent);
 }
 
 .error-message {
-  background: rgba(239, 68, 68, 0.1);
+  background-color: rgba(239, 68, 68, 0.05);
   border: 1px solid rgba(239, 68, 68, 0.3);
-  color: var(--error-red);
-  box-shadow: 0 8px 32px rgba(239, 68, 68, 0.12);
+  color: #ef4444;
 }

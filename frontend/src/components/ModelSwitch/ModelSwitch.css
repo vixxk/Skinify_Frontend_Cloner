@@ -1,134 +1,64 @@
-/* Model Switch Wrapper */
-.model-switch-wrapper {
+.engine-select-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.hardware-switch-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.hardware-switch {
   display: flex;
   align-items: center;
   gap: 14px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--border-light);
-  padding: 10px 16px;
-  border-radius: var(--border-radius-large);
-  backdrop-filter: blur(20px);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
-}
-
-.model-icon {
-  color: var(--primary-orange);
-  flex-shrink: 0;
-}
-
-.switch-label-text {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  user-select: none;
-  white-space: nowrap;
-}
-
-/* Model Selector */
-.model-selector {
-  display: flex;
-  gap: 8px;
-  background: rgba(0, 0, 0, 0.4);
-  padding: 4px;
-  border-radius: var(--border-radius-medium);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.model-option {
-  padding: 8px 16px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  background: transparent;
-  color: var(--text-muted);
-  border: none;
-  border-radius: var(--border-radius-small);
+  background-color: #111424;
+  border: 1px solid var(--color-border);
+  padding: 16px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  white-space: nowrap;
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-align: left;
+  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease;
   position: relative;
-  overflow: hidden;
+  outline: none;
 }
 
-.model-option::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, var(--primary-orange), var(--primary-orange-dark));
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: -1;
+.hardware-switch:hover {
+  border-color: var(--color-accent);
 }
 
-.model-option:hover:not(.active) {
-  color: var(--text-primary);
-  background: rgba(255, 107, 53, 0.1);
+.hardware-switch.active {
+  background-color: var(--color-accent);
+  color: var(--color-base);
+  border-color: var(--color-accent);
 }
 
-.model-option.active {
-  color: #ffffff;
-  position: relative;
-  z-index: 1;
+/* Technical LED indicator inside the hardware button */
+.switch-led {
+  width: 8px;
+  height: 8px;
+  background-color: #2b3040;
+  border: 1px solid rgba(170, 255, 0, 0.2);
+  transition: background-color 150ms ease, border-color 150ms ease;
 }
 
-.model-option.active::before {
-  opacity: 1;
+.hardware-switch.active .switch-led {
+  background-color: var(--color-base);
+  border-color: var(--color-base);
 }
 
-/* Fixed top bars */
-.fixed-top-bar {
-  position: fixed;
-  top: 1.25rem;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.hardware-switch:not(.active):hover .switch-led {
+  background-color: rgba(170, 255, 0, 0.5);
+  border-color: var(--color-accent);
 }
 
-.fixed-top-bar.left {
-  left: 1.25rem;
-}
-
-@media (max-width: 1024px) {
-  .switch-label-text {
-    display: none;
-  }
-}
-
-@media (max-width: 768px) {
-  .fixed-top-bar {
-    position: static;
-    margin: 1rem;
-    justify-content: center;
-  }
-
-  .model-switch-wrapper {
-    padding: 8px 12px;
-    gap: 10px;
-    flex-direction: column;
-  }
-
-  .switch-label-text {
-    display: block;
-    font-size: 0.85rem;
-  }
-
-  .model-selector {
-    width: 100%;
-  }
-
-  .model-option {
-    flex: 1;
-    padding: 10px 12px;
-    font-size: 0.8rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .model-option {
-    font-size: 0.75rem;
-    padding: 8px 10px;
-  }
+.switch-text {
+  letter-spacing: 0.05em;
 }

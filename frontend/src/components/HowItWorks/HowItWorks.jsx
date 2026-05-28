@@ -1,108 +1,54 @@
-import { Sparkles, Monitor, Terminal } from "lucide-react";
 import "./HowItWorks.css";
 
-// YouTube accent icon using SVG - circular, minimal
-function YouTubeIcon() {
-  return (
-    <svg
-      width="23"
-      height="23"
-      fill="none"
-      viewBox="0 0 32 32"
-      style={{
-        display: "block"
-      }}
-    >
-      <circle cx="16" cy="16" r="16" fill="#FF4B2B"/>
-      <polygon points="12,10 24,16 12,22" fill="#fff"/>
-    </svg>
-  );
-}
-
 export default function HowItWorks() {
+  const steps = [
+    {
+      num: "01",
+      title: "ENTER TARGET DOMAIN",
+      desc: "Provide any keyword, domain name, or direct URL inside the terminal command input above."
+    },
+    {
+      num: "02",
+      title: "ENGINE SELECTION & RESOLUTION",
+      desc: "The active scraper resolves the host, checks routing tables, and builds file maps."
+    },
+    {
+      num: "03",
+      title: "SCRAPE & PACKAGE COMPILATION",
+      desc: "Skinify pulls resources, remaps asset urls, compiles structure, and generates a zip archive."
+    },
+    {
+      num: "04",
+      title: "LOCAL SANDBOX RUNTIME",
+      desc: "Extract the zip file and go live instantly with VS Code Live Server or by running open.bat / open.sh."
+    }
+  ];
+
   return (
-    <section className="how-it-works">
-      <div className="how-it-works-header">
-        <Sparkles size={20} />
-        <span>How it works</span>
-      </div>
-      <div className="steps-grid">
-        {/* Numbered Steps */}
-        {[
-          { num: 1, title: "Enter keyword", desc: "Type website name or URL" },
-          { num: 2, title: "Auto-resolve", desc: "Skinify finds the correct URL" },
-          { num: 3, title: "Download & Extract", desc: "Get ZIP and extract files" }
-        ].map((step) => (
-          <div key={step.num} className="step">
-            <div className="step-number">{step.num}</div>
-            <div className="step-content">
-              <div className="step-title">{step.title}</div>
-              <div className="step-description">{step.desc}</div>
+    <section className="extraction-protocol-section">
+      <span className="section-label">// EXTRACTION PROTOCOL</span>
+      <div className="protocol-steps-list">
+        {steps.map((step, idx) => (
+          <div key={step.num} className="protocol-step-wrapper">
+            <div className="protocol-step-item">
+              <div className="protocol-watermark">{step.num}</div>
+              <div className="protocol-content">
+                <h4 className="protocol-title">{step.title}</h4>
+                <p className="protocol-desc">{step.desc}</p>
+              </div>
             </div>
+            {idx < steps.length - 1 && <div className="protocol-divider" />}
           </div>
         ))}
-
-        {/* Go Live step remains same */}
-        <div className="step-go-live-container">
-          <div className="step-header">
-            <div className="step-number">4</div>
-            <div className="step-title">Go Live</div>
-          </div>
-          <div className="go-live-options">
-            <div className="go-live-option">
-              <div className="option-icon">
-                <Monitor size={16} />
-              </div>
-              <div className="option-content">
-                <div className="option-title">VS Code</div>
-                <div className="option-desc">Launch with Live Server</div>
-              </div>
-            </div>
-            <div className="option-divider">OR</div>
-            <div className="go-live-option">
-              <div className="option-icon">
-                <Terminal size={16} />
-              </div>
-              <div className="option-content">
-                <div className="option-title">Terminal/Bash</div>
-                <div className="option-desc">
-                  .bat(Windows)
-                  <br /> .sh(Linux/Mac)
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Video Tutorial, styled exactly as a step but clickable */}
+      </div>
+      <div className="protocol-video-container">
         <a
           href="https://www.youtube.com/watch?v=UC4WWgLZCWI"
           target="_blank"
           rel="noopener noreferrer"
-          className="step step-video"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            padding: "20px 18px",
-            cursor: "pointer",
-            border: "1.5px solid var(--primary-orange)",
-            boxShadow: "0 4px 12px 0 rgba(255,107,53,0.16)",
-            textDecoration: "none",
-            background: "rgba(255, 107, 53, 0.08)",
-            transition: "var(--transition-default)"
-          }}
+          className="protocol-video-link"
         >
-          <div className="step-number" style={{ background: "linear-gradient(135deg,#FF4B2B,#ff7c3b)" }}>
-            <YouTubeIcon />
-          </div>
-          <div className="step-content">
-            <div className="step-title" style={{ color: "var(--primary-orange)", fontWeight: 700 }}>
-              Demo Video
-            </div>
-            <div className="step-description" style={{ color: "#ffb288", fontWeight: 500 }}>
-              Click here for a <br></br>step-by-step demo!
-            </div>
-          </div>
+          &gt;_ LAUNCH VIDEO TUTORIAL [DEMO_STREAM.MOV]
         </a>
       </div>
     </section>

@@ -1,146 +1,143 @@
-/* Input Section */
-.input-section {
-  background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--border-light);
-  border-radius: var(--border-radius-xlarge);
-  padding: 2.5rem;
-  margin-bottom: 2rem;
-  width: 100%;
-  box-sizing: border-box;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
-}
-
-.input-group {
+.terminal-input-group {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
-}
-
-.input-wrapper {
-  position: relative;
-  flex: 1;
-  min-width: 300px;
-}
-
-.search-icon {
-  position: absolute;
-  left: 18px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--primary-orange);
-}
-
-.keyword-input {
+  gap: 16px;
   width: 100%;
-  padding: 18px 18px 18px 52px;
-  font-size: 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 107, 53, 0.25);
-  border-radius: var(--border-radius-large);
-  color: var(--text-primary);
-  outline: none;
-  transition: var(--transition-default);
-  font-weight: 500;
 }
 
-.keyword-input:focus {
-  border-color: var(--primary-orange);
-  box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1);
-  background: rgba(255, 255, 255, 0.07);
-}
-
-.keyword-input::placeholder {
-  color: var(--text-muted);
-}
-
-/* Buttons */
-.scrape-btn {
-  padding: 18px 36px;
-  font-size: 1rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, var(--primary-orange), var(--primary-orange-dark));
-  color: #ffffff;
-  border: none;
-  border-radius: var(--border-radius-large);
-  cursor: pointer;
+.terminal-input-wrapper {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 10px;
-  transition: var(--transition-default);
-  box-shadow: var(--shadow-orange);
-  min-width: 180px;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
+  flex-grow: 1;
+  background-color: #111424;
+  padding: 14px 18px;
 }
 
-.scrape-btn::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
+/* Blinking terminal cursor */
+.terminal-cursor {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  margin-right: 10px;
+  animation: cursor-blink 1.2s step-end infinite;
+  user-select: none;
+}
+
+@keyframes cursor-blink {
+  from, to { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.terminal-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
   width: 100%;
+  text-transform: uppercase;
+}
+
+.terminal-input::placeholder {
+  color: rgba(232, 232, 224, 0.25);
+}
+
+/* Circuit trace lines for focus transition */
+.trace-line {
+  position: absolute;
+  background-color: var(--color-accent);
+  transition: all 150ms ease-out;
+  z-index: 10;
+}
+
+/* Unfocused: only bottom border displays */
+.trace-bottom {
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  width: 100%;
+}
+
+.trace-top {
+  top: 0;
+  left: 0;
+  height: 1px;
+  width: 0;
+}
+
+.trace-right {
+  top: 0;
+  right: 0;
+  width: 1px;
+  height: 0;
+}
+
+.trace-left {
+  bottom: 0;
+  left: 0;
+  width: 1px;
+  height: 0;
+}
+
+/* Focused: lines animate to complete the outline rect */
+.terminal-input-wrapper:focus-within .trace-top {
+  width: 100%;
+}
+
+.terminal-input-wrapper:focus-within .trace-right {
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s ease;
+  transition-delay: 37ms;
 }
 
-.scrape-btn:hover:not(.loading)::before {
-  left: 100%;
+.terminal-input-wrapper:focus-within .trace-bottom {
+  /* Maintain the bottom border */
+  width: 100%;
 }
 
-.scrape-btn:hover:not(.loading) {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(255, 107, 53, 0.4);
+.terminal-input-wrapper:focus-within .trace-left {
+  height: 100%;
+  transition-delay: 112ms;
 }
 
-.scrape-btn.loading {
-  background: linear-gradient(135deg, #4b5563, #6b7280);
-  cursor: not-allowed;
-  box-shadow: none;
-}
-
-.spin {
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Deep mode section */
-.deep-mode-section {
-  background: rgba(255, 107, 53, 0.05);
-  border: 1px solid rgba(255, 107, 53, 0.15);
-  border-radius: var(--border-radius-large);
-  padding: 1.1rem 1.3rem;
-  margin-bottom: 2.1rem;
-}
-
-.deep-mode-description {
+/* Execute Button (hard rectangular block, no rounded corners) */
+.terminal-execute-btn {
+  background-color: var(--color-accent);
+  color: var(--color-base);
+  border: none;
+  font-family: var(--font-mono);
   font-size: 0.9rem;
-  color: var(--text-secondary);
-  line-height: 1.6;
-  margin: 0;
+  font-weight: 700;
+  padding: 0 28px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 100ms ease, color 100ms ease;
+  outline: none;
 }
 
-@media (max-width: 768px) {
-  .input-section {
-    padding: 2rem;
-  }
+.terminal-execute-btn:hover {
+  background-color: #99ee00;
+}
 
-  .input-group {
+.terminal-execute-btn:active {
+  background-color: #88dd00;
+}
+
+.terminal-execute-btn:disabled {
+  background-color: #1e2a3a;
+  color: rgba(232, 232, 224, 0.25);
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .terminal-input-group {
     flex-direction: column;
+    gap: 12px;
   }
-
-  .input-wrapper {
-    min-width: auto;
+  
+  .terminal-execute-btn {
+    padding: 16px;
+    text-align: center;
+    width: 100%;
   }
 }

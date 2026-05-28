@@ -18,9 +18,28 @@ Clone any website’s frontend assets instantly using smart keyword-to-URL AI re
 
 ---
 
+## 🧠 Keyword-to-URL Hybrid Resolution Pipeline
+
+Skinify implements a multi-tier hybrid resolution pipeline to convert keywords (e.g., `"piyush garg dev"`, `"github"`) into valid, scrapeable destination URLs:
+
+1. **Direct Match Protocol**:
+   - The backend checks the input string against a domain pattern regex.
+   - If it detects a direct domain (e.g., `react.dev`), it automatically prepends the `https://` protocol and skips external requests.
+
+2. **DuckDuckGo Search Scraper (Zero-Cost Live Resolution)**:
+   - If a query is keyword-based, the backend issues an HTTP request to DuckDuckGo's Lite HTML search endpoint (`html.duckduckgo.com`).
+   - It loads the document using `cheerio`, extracts the first organic result link, decodes DuckDuckGo's redirect query parameter (`uddg`), and retrieves the destination host.
+   - This provides real-time, accurate URL lookup without incurring API latency or costs.
+
+3. **LLM Fallback (Fireworks / DeepSeek)**:
+   - If the DuckDuckGo scraper is blocked or returns no results, the system queries the Fireworks AI API (`accounts/fireworks/models/deepseek-v4-pro` model by default).
+   - The LLM resolves the official target homepage based on its trained knowledge base.
+
+---
+
 ## 🛠️ Tech Stack
 
-- **Backend**: Node.js, Express, Gemini AI, website-scraper, puppeteer, cheerio, archiver
+- **Backend**: Node.js, Express, Fireworks AI (DeepSeek), website-scraper, puppeteer, cheerio, archiver
 - **Frontend**: React + Vite, Lucide icons, custom CSS
 
 ---
@@ -28,7 +47,7 @@ Clone any website’s frontend assets instantly using smart keyword-to-URL AI re
 ## 📋 Prerequisites
 
 - Node.js 16+  
-- Google Gemini API key  
+- Fireworks AI API key (or Gemini API key fallback)  
 - Git
 
 ---

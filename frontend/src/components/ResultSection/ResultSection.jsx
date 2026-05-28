@@ -1,62 +1,54 @@
-import { Globe, Download } from "lucide-react";
+import { Globe, Download, Terminal, HardDrive } from "lucide-react";
 import "./ResultSection.css";
 
 export default function ResultSection({ resolvedURL, folderName, BACKEND_URL }) {
   return (
     <div className="result-section">
+      <span className="section-label">// SCRAPING OUTPUT READY</span>
+      
       <div className="resolved-url">
-        <Globe size={16} color="#8b5cf6" />
-        <span className="url-label">Resolved URL:</span>
+        <Globe size={16} className="url-icon" />
+        <span className="url-label">RESOLVED HOST:</span>
         <a href={resolvedURL} className="url-link" target="_blank" rel="noopener noreferrer">
           {resolvedURL}
         </a>
       </div>
+
       <button
         className="download-btn"
         onClick={() => window.open(`${BACKEND_URL}/download/${folderName}`, "_blank")}
+        type="button"
       >
-        <Download size={16} /> Download ZIP
+        <Download size={16} /> DOWNLOAD COMPILATION (.ZIP)
       </button>
 
       <div className="instructions-section">
-        <h4 className="instructions-title">🚀 How to Go Live:</h4>
+        <h4 className="instructions-title">
+          <Terminal size={18} className="instruction-header-icon" /> // RUNTIME DEPLOYMENT INSTRUCTIONS:
+        </h4>
         <div className="instructions-grid">
           <div className="instruction-method">
-            <h5>Method 1: VS Code Live Server</h5>
+            <h5>
+              <HardDrive size={14} className="method-icon" /> IDE RUNTIME (VS CODE)
+            </h5>
             <ol>
-              <li>Extract the ZIP file to a folder</li>
-              <li>Open VS Code → File → Open Folder</li>
-              <li>Select the extracted folder</li>
-              <li>
-                Open <code>index.html</code>→Right Click
-              </li>
-              <li>
-                Select <strong>"Open with Live Server"</strong>
-              </li>
+              <li>EXTRACT COMPILATION COMPRESSED FILE</li>
+              <li>LAUNCH VS CODE -&gt; OPEN FOLDER</li>
+              <li>RIGHT-CLICK <code>index.html</code></li>
+              <li>SELECT <strong>"OPEN WITH LIVE SERVER"</strong></li>
             </ol>
           </div>
           <div className="instruction-method">
-            <h5>Method 2: Script Files</h5>
+            <h5>
+              <Terminal size={14} className="method-icon" /> SHELL/TERMINAL RUNTIME
+            </h5>
             <ol>
-              <li>Extract the ZIP file to a folder</li>
-              <li>Open the extracted folder</li>
-              <li>
-                <strong>Windows:</strong> Double-click <code>open.bat</code>
-              </li>
-              <li>
-                <strong>Mac/Linux:</strong> Open terminal in folder
-              </li>
-              <li>
-                <strong>Mac/Linux:</strong> Run <code>bash open.sh</code>
-              </li>
+              <li>EXTRACT COMPILATION COMPRESSED FILE</li>
+              <li>LAUNCH TERMINAL IN RESOURCE FOLDER</li>
+              <li>WINDOWS: RUN <code>open.bat</code></li>
+              <li>MAC/LINUX: RUN <code>bash open.sh</code></li>
             </ol>
           </div>
-        </div>
-        <div className="instructions-note">
-          <p>
-            <strong>💡 Pro Tip:</strong> Both methods will automatically open your browser and serve
-            the website locally with live reload capabilities!
-          </p>
         </div>
       </div>
     </div>
