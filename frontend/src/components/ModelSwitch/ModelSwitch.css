@@ -62,3 +62,17 @@
 .switch-text {
   letter-spacing: 0.05em;
 }
+
+.hardware-switch:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.hardware-switch:disabled:hover {
+  border-color: var(--color-border);
+}
+
+.hardware-switch:disabled .switch-led {
+  background-color: #2b3040;
+  border-color: rgba(170, 255, 0, 0.1);
+}

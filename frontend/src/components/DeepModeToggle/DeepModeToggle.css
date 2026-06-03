@@ -101,3 +101,12 @@
 .industrial-toggle-status.active {
   color: var(--color-accent);
 }
+
+.industrial-toggle-track:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.industrial-toggle-track:disabled:hover {
+  border-color: var(--color-border);
+}

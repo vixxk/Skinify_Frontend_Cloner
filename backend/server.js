@@ -56,8 +56,14 @@ app.get("/download/:folderName", async (req, res) => {
 
   if (!fs.existsSync(folderPath)) return res.status(404).send("Folder not found");
   
+  // Clean filename for proper UX
+  let cleanName = req.params.folderName.replace(/\(\d+\)$/, "");
+  // Reconstruct domain format (replace dashes with dots)
+  let domainName = cleanName.replace(/-/g, ".");
+  const downloadFileName = `skinify-${domainName}.zip`;
+
   // This tells the browser that this file is meant to be downloaded, not displayed
-  res.setHeader("Content-Disposition", `attachment; filename=${req.params.folderName}.zip`);
+  res.setHeader("Content-Disposition", `attachment; filename="${downloadFileName}"`);
   res.setHeader("Content-Type", "application/zip");
 
   const archive = archiver("zip", { zlib: { level: 9 } });

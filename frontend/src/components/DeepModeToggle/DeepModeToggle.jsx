@@ -1,6 +1,6 @@
 import "./DeepModeToggle.css";
 
-export default function DeepModeToggle({ deepMode, setDeepMode }) {
+export default function DeepModeToggle({ deepMode, setDeepMode, disabled }) {
   return (
     <div className="deep-mode-sidebar-container">
       <div className="deep-mode-header">
@@ -16,7 +16,8 @@ export default function DeepModeToggle({ deepMode, setDeepMode }) {
         <button
           type="button"
           className={`industrial-toggle-track ${deepMode ? "active" : ""}`}
-          onClick={() => setDeepMode(!deepMode)}
+          onClick={() => !disabled && setDeepMode(!deepMode)}
+          disabled={disabled}
           aria-label="Toggle Deep Mode"
         >
           <span className="industrial-toggle-thumb" />

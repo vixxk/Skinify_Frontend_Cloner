@@ -14,13 +14,15 @@ import FaqSection from "./components/FaqSection/FaqSection";
 
 export default function App() {
   const [keyword, setKeyword] = useState("");
-  const [resolvedURL, setResolvedURL] = useState("");
-  const [folderName, setFolderName] = useState("");
+  const [modelResults, setModelResults] = useState({
+    "website-scraper": { resolvedURL: "", folderName: "", success: "", error: "" },
+    "puppeteer-cheerio": { resolvedURL: "", folderName: "", success: "", error: "" }
+  });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [deepMode, setDeepMode] = useState(false);
   const [model, setModel] = useState("website-scraper");
+
+  const { resolvedURL, folderName, success, error } = modelResults[model];
 
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://skinify-backend-ui4w.onrender.com";
 
@@ -37,12 +39,18 @@ export default function App() {
   ];
 
   const handleScrape = async () => {
-    if (!keyword.trim()) return setError("Please enter a keyword or URL!");
+    if (!keyword.trim()) {
+      setModelResults(prev => ({
+        ...prev,
+        [model]: { ...prev[model], error: "Please enter a keyword or URL!", success: "" }
+      }));
+      return;
+    }
     setLoading(true);
-    setError("");
-    setSuccess("");
-    setResolvedURL("");
-    setFolderName("");
+    setModelResults(prev => ({
+      ...prev,
+      [model]: { resolvedURL: "", folderName: "", success: "", error: "" }
+    }));
 
     try {
       const timeoutDuration = deepMode ? 300000 : 100000;
@@ -69,30 +77,50 @@ export default function App() {
       const data = await res.json();
 
       if (!data.url) {
-        setError("Could not resolve URL. Try another keyword or paste the URL.");
+        setModelResults(prev => ({
+          ...prev,
+          [model]: {
+            resolvedURL: "",
+            folderName: "",
+            success: "",
+            error: "Could not resolve URL. Try another keyword or paste the URL."
+          }
+        }));
       } else {
-        setResolvedURL(data.url);
-        setFolderName(data.folder);
         const modelName = model === "website-scraper" ? "Website Scraper" : "Puppeteer + Cheerio";
         const modeText = model === "website-scraper" && deepMode ? " (Deep mode)" : " (Landing page only)";
-        setSuccess(`Website scraped successfully using ${modelName}${modeText}`);
+        setModelResults(prev => ({
+          ...prev,
+          [model]: {
+            resolvedURL: data.url,
+            folderName: data.folder,
+            success: `Website scraped successfully using ${modelName}${modeText}`,
+            error: ""
+          }
+        }));
       }
     } catch (err) {
+      let errMsg = "";
       if (err.name === "AbortError") {
-        setError(
-          `Request timed out. ${
-            deepMode
-              ? "Deep mode takes longer - try again or disable deep mode."
-              : "Try again or check your connection."
-          }`
-        );
-      } else if (err.message.includes("HTTP error")) {
-        setError(
-          "Server error occurred during scraping. If you are typing keywords, try giving the full URL instead. The backend memory might be full. Please try again after 2 minutes."
-        );
+        errMsg = `Request timed out. ${
+          deepMode
+            ? "Deep mode takes longer - try again or disable deep mode."
+            : "Try again or check your connection."
+        }`;
+      } else if (err.message && err.message.includes("HTTP error")) {
+        errMsg = "Server error occurred during scraping. If you are typing keywords, try giving the full URL instead. The backend memory might be full. Please try again after 2 minutes.";
       } else {
-        setError("Cannot connect to server. Please check if the backend is running.");
+        errMsg = "Cannot connect to server. Please check if the backend is running.";
       }
+      setModelResults(prev => ({
+        ...prev,
+        [model]: {
+          resolvedURL: "",
+          folderName: "",
+          success: "",
+          error: errMsg
+        }
+      }));
     } finally {
       setLoading(false);
     }
@@ -131,13 +159,14 @@ export default function App() {
         </div>
 
         <div className="sidebar-section">
-          <ModelSwitch model={model} setModel={setModel} />
+          <ModelSwitch model={model} setModel={setModel} disabled={loading} />
         </div>
 
         <div className="sidebar-section" style={{ opacity: model === "website-scraper" ? 1 : 0.4, transition: "opacity 150ms" }}>
           <DeepModeToggle 
             deepMode={model === "website-scraper" ? deepMode : false} 
             setDeepMode={model === "website-scraper" ? setDeepMode : () => {}} 
+            disabled={loading}
           />
         </div>
 

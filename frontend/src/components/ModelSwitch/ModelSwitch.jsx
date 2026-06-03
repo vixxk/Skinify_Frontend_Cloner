@@ -31,7 +31,7 @@ function useScrambler(targetText, trigger) {
   return text;
 }
 
-export default function ModelSwitch({ model, setModel }) {
+export default function ModelSwitch({ model, setModel, disabled }) {
   const scraperText = useScrambler("WEBSITE SCRAPER", model);
   const puppeteerText = useScrambler("PUPPETEER + CHEERIO", model);
 
@@ -41,7 +41,8 @@ export default function ModelSwitch({ model, setModel }) {
       <div className="hardware-switch-group">
         <button
           className={`hardware-switch ${model === "website-scraper" ? "active" : ""}`}
-          onClick={() => setModel("website-scraper")}
+          onClick={() => !disabled && setModel("website-scraper")}
+          disabled={disabled}
           type="button"
         >
           <div className="switch-led" />
@@ -51,7 +52,8 @@ export default function ModelSwitch({ model, setModel }) {
         </button>
         <button
           className={`hardware-switch ${model === "puppeteer-cheerio" ? "active" : ""}`}
-          onClick={() => setModel("puppeteer-cheerio")}
+          onClick={() => !disabled && setModel("puppeteer-cheerio")}
+          disabled={disabled}
           type="button"
         >
           <div className="switch-led" />
