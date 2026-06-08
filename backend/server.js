@@ -80,8 +80,56 @@ app.get("/download/:folderName", async (req, res) => {
     archive.file(openBatPath, { name: "open.bat" });
   }
 
+  res.on("finish", () => {
+    fs.rm(folderPath, { recursive: true, force: true }, (err) => {
+      if (err) {
+        console.error(`Error deleting folder ${folderPath} after download:`, err);
+      } else {
+        console.log(`Deleted folder ${folderPath} after download`);
+      }
+    });
+  });
+
   await archive.finalize();
 });
 
+// Run cleanup task every 10 minutes to evict folders older than 30 minutes
+const CLEANUP_INTERVAL = 10 * 60 * 1000; 
+const MAX_AGE = 30 * 60 * 1000;          
+
+setInterval(() => {
+  const downloadsPath = path.join(process.cwd(), "downloads");
+  if (!fs.existsSync(downloadsPath)) return;
+
+  fs.readdir(downloadsPath, (err, files) => {
+    if (err) {
+      console.error("Error reading downloads directory for cleanup:", err);
+      return;
+    }
+
+    const now = Date.now();
+    files.forEach((file) => {
+      const filePath = path.join(downloadsPath, file);
+      fs.stat(filePath, (err, stats) => {
+        if (err) {
+          console.error(`Error checking stats for ${filePath}:`, err);
+          return;
+        }
+
+        if (now - stats.mtimeMs > MAX_AGE) {
+          fs.rm(filePath, { recursive: true, force: true }, (err) => {
+            if (err) {
+              console.error(`Failed to evict expired folder/file ${filePath}:`, err);
+            } else {
+              console.log(`Evicted expired folder/file: ${filePath}`);
+            }
+          });
+        }
+      });
+    });
+  });
+}, CLEANUP_INTERVAL);
+
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
 // trial

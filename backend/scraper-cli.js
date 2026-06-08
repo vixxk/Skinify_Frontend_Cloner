@@ -173,7 +173,7 @@ export async function resolveWebsiteURL(keyword) {
 
   // 4. LLM Fallback (Gemini API)
   if (!targetUrl) {
-    console.log(`[LLM Fallback] Resolving "${cleanKeyword}" via Gemini API`);
+    console.log(`[LLM Fallback] Resolving "${cleanKeyword}" via Fireworks API`);
     const now = Date.now();
     const timeSinceLastCall = now - lastApiCallTime;
     if (timeSinceLastCall < MIN_TIME_BETWEEN_CALLS) {
