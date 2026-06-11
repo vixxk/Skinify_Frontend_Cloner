@@ -11,6 +11,7 @@ import ResultSection from "./components/ResultSection/ResultSection";
 import ExamplesSection from "./components/ExamplesSection/ExamplesSection";
 import BackgroundElements from "./components/BackgroundElements/BackgroundElements";
 import FaqSection from "./components/FaqSection/FaqSection";
+import Chatbot from "./components/Chatbot/Chatbot";
 
 export default function App() {
   const [keyword, setKeyword] = useState("");
@@ -222,6 +223,7 @@ export default function App() {
 
         <FaqSection />
       </main>
+      <Chatbot />
     </div>
   );
 }

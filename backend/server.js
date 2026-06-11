@@ -5,6 +5,7 @@ import archiver from "archiver";
 import cors from "cors";
 import bodyParser from "body-parser";
 import { resolveWebsiteURL, scrapeWebsiteByScraper,scrapeWebsiteByPuppeteer} from "./scraper-cli.js";
+import chatbotRouter from "./chatbot/chatbot.js";
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -12,6 +13,8 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 
 app.use(bodyParser.json());
+
+app.use("/api/chat", chatbotRouter);
 
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
