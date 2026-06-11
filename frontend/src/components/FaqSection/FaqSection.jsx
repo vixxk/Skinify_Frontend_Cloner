@@ -16,7 +16,7 @@ const faqList = [
   },
   {
     q: "Why do I encounter usage errors or failed downloads?",
-    a: "Skinify currently runs on a free tier Render backend with limited memory and CPU. High traffic, large downloads, or multiple users may lead to temporary server errors. Wait a few moments and try again if you see errors."
+    a: "Skinify currently runs on an AWS backend with limited memory and CPU. High traffic, large downloads, or multiple users may lead to temporary server errors. Wait a few moments and try again if you see errors."
   },
   {
     q: "Is there a limit on what domains I can clone?",

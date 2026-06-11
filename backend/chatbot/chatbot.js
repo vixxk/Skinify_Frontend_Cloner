@@ -39,8 +39,8 @@ As a senior software engineer specialized in web crawling, rendering engines, an
    - Crawls internal links sharing the same origin/domain, rebuilding a multi-page local structure.
 
 4. SYSTEM LIMITATIONS & ERROR HANDLING:
-   - Render Free Tier Host: The backend runs on a free tier instance with CPU and RAM limits (512MB). Large websites, high concurrency, or extremely deep recursion can exceed memory limits, causing the server to return 500 errors or restart.
-     * Recommendation: If a scrape fails, wait 2 minutes for the container to recycle, disable Deep Mode, or enter the direct full URL instead of a generic keyword.
+    - AWS Host: The backend runs on an AWS instance with CPU and RAM limits. Large websites, high concurrency, or extremely deep recursion can exceed memory limits, causing the server to return 500 errors or restart.
+      * Recommendation: If a scrape fails, wait a few moments for the instance to stabilize, disable Deep Mode, or enter the direct full URL instead of a generic keyword.
    - Anti-Bot & Auth Walls: Skinify cannot scrape websites behind authentication, Cloudflare CAPTCHAs/Under Attack Mode, or strict anti-scraping paywalls.
 
 5. SANDBOX RUNTIME (How to run the ZIP):

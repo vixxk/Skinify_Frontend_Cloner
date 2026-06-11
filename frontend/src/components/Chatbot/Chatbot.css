@@ -96,12 +96,12 @@
 .chatbot-window {
   width: 440px;
   height: 600px;
-  background-color: rgba(7, 8, 15, 0.95);
-  border: 1px solid var(--color-border);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  background-color: #0b111e;
+  border: 1px solid rgba(170, 255, 0, 0.25);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7), 0 0 30px rgba(170, 255, 0, 0.05);
   display: flex;
   flex-direction: column;
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px);
   animation: slide-up 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
 }
@@ -125,6 +125,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .header-title-container {
@@ -179,6 +180,7 @@
   flex-direction: column;
   gap: 16px;
   scroll-behavior: smooth;
+  min-height: 0;
 }
 
 .chatbot-message-bubble {
@@ -334,34 +336,41 @@
 
 /* Presets Suggestions */
 .chatbot-presets {
-  padding: 0 16px 12px 16px;
+  padding: 0 16px 16px 16px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
 .presets-label {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 700;
   color: #88888F;
+  letter-spacing: 0.05em;
 }
 
 .presets-list {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .preset-btn {
   text-align: left;
-  background: transparent;
+  background: rgba(30, 42, 58, 0.15);
   border: 1px solid var(--color-border);
-  color: #88888F;
-  padding: 8px 12px;
+  color: #a0a0a9;
+  padding: 10px 14px;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  white-space: normal;
+  word-wrap: break-word;
+  line-height: 1.45;
+  flex-shrink: 0;
+  border-radius: 4px;
 }
 
 .preset-btn:hover {
@@ -378,7 +387,8 @@
   display: flex;
   gap: 8px;
   align-items: center;
-  background-color: rgba(7, 8, 15, 0.8);
+  background-color: rgba(11, 17, 30, 0.9);
+  flex-shrink: 0;
 }
 
 .chatbot-textarea {
@@ -462,8 +472,8 @@
   }
 
   .preset-btn {
-    padding: 6px 10px;
-    font-size: 0.7rem;
+    padding: 8px 12px;
+    font-size: 0.75rem;
   }
 
   .chatbot-textarea {
