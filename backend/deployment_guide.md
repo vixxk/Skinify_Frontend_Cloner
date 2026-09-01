@@ -82,17 +82,7 @@ npm -v
 
 Puppeteer downloads its own Chrome executable during installation, but it relies on several shared Linux system libraries to run headlessly.
 
-### Option A: Automatic Dependency Installation (Recommended)
-You can use Puppeteer's built-in installer tool, which automatically detects your OS and installs all necessary system libraries via `apt-get`. 
-
-Run the following command inside your project directory on the EC2 instance:
-```bash
-sudo npx puppeteer browsers install chrome --install-deps
-```
-
----
-
-### Option B: Manual Installation
+### Manual Installation
 If Option A fails or if you want to install them manually, run the following command. 
 
 *Note: For Ubuntu 24.04+ (or Resolute), run this command which uses `libasound2t64` instead of `libasound2`:*
@@ -147,7 +137,7 @@ sudo apt-get update && sudo apt-get install -y \
 
 1. Clone your project code onto the EC2 instance:
    ```bash
-   git clone <your-repository-url>
+   git clone https://github.com/vixxk/Skinify_Frontend_Cloner.git
    cd Skinify_Frontend_Cloner/backend
    ```
 2. Install npm dependencies:
@@ -277,3 +267,46 @@ Since `sslip.io` provides a valid DNS resolution to your EC2 IP, Let's Encrypt c
 * **Stop backend application**: `pm2 stop skinify-backend`
 * **View running processes**: `pm2 list`
 * **Check Node CPU/RAM load**: `pm2 monit`
+
+---
+
+## 11. Troubleshooting Common Errors
+
+### Error 1: `ENOSPC: no space left on device` during `npm install`
+This occurs when the EC2 disk drive runs out of free space (common on default 8GB EBS volumes during Puppeteer Chrome binary download).
+
+**Solutions:**
+1. **Clean up disk space & npm cache:**
+   ```bash
+   sudo apt clean
+   sudo apt autoremove -y
+   sudo rm -rf ~/.npm /tmp/*
+   ```
+2. **Install dependencies skipping Puppeteer binary download:**
+   ```bash
+   PUPPETEER_SKIP_DOWNLOAD=true npm install
+   ```
+   *Then install Chrome browser separately if needed using `sudo npx puppeteer browsers install chrome --install-deps`.*
+3. **Expand EBS Volume (if instance is out of space):**
+   Check disk usage with `df -h`. If root volume is 100% full, increase volume size in AWS Console (EC2 -> Volumes -> Modify Volume to e.g. 20GB), then extend the partition on EC2:
+   ```bash
+   # For nvme root partition (e.g. Ubuntu t3 instances)
+   sudo growpart /dev/nvme0n1 1
+   sudo resize2fs /dev/nvme0n1p1
+   ```
+
+---
+
+### Error 2: `[ Directory '/etc/nginx/sites-available' does not exist ]`
+This occurs when trying to edit Nginx configuration before Nginx is installed on the EC2 instance.
+
+**Solution:**
+Ensure Nginx is installed first before running `nano`:
+```bash
+sudo apt update && sudo apt install -y nginx
+```
+After Nginx is installed, `/etc/nginx/sites-available` will be created automatically, and you can proceed with:
+```bash
+sudo nano /etc/nginx/sites-available/skinify-backend
+```
+
