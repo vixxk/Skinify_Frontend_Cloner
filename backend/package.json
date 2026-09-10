@@ -8,7 +8,6 @@
     "postinstall": "puppeteer browsers install chrome",
     "start": "node server.js",
     "dev": "node --watch server.js"
-
   },
   "keywords": [],
   "author": "",
@@ -30,5 +29,28 @@
     "puppeteer": "^24.17.0",
     "url": "^0.11.4",
     "website-scraper": "^5.3.1"
+  },
+  "overrides": {
+    "@puppeteer/browsers": {
+      "basic-ftp": "5.3.1"
+    },
+    "basic-ftp": {
+      "basic-ftp": "5.3.1"
+    },
+    "get-uri": {
+      "basic-ftp": "5.3.1"
+    },
+    "pac-proxy-agent": {
+      "basic-ftp": "5.3.1"
+    },
+    "proxy-agent": {
+      "basic-ftp": "5.3.1"
+    },
+    "puppeteer": {
+      "basic-ftp": "5.3.1"
+    },
+    "puppeteer-core": {
+      "basic-ftp": "5.3.1"
+    }
   }
 }
