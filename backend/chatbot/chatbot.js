@@ -67,7 +67,7 @@ router.post('/', async (req, res) => {
 
   try {
     const response = await openai.chat.completions.create({
-      model: process.env.FIREWORKS_MODEL || 'accounts/fireworks/models/deepseek-v4-pro',
+      model: process.env.FIREWORKS_MODEL || 'accounts/fireworks/models/deepseek-v4-pro-0813',
       messages: [
         { role: 'system', content: SYSTEM_PROMPT },
         ...messages

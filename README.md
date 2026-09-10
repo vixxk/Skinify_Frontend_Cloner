@@ -32,7 +32,7 @@ Skinify implements a multi-tier hybrid resolution pipeline to convert keywords (
    - This provides real-time, accurate URL lookup without incurring API latency or costs.
 
 3. **LLM Fallback (Fireworks / DeepSeek)**:
-   - If the DuckDuckGo scraper is blocked or returns no results, the system queries the Fireworks AI API (`accounts/fireworks/models/deepseek-v4-pro` model by default).
+   - If the DuckDuckGo scraper is blocked or returns no results, the system queries the Fireworks AI API (`accounts/fireworks/models/deepseek-v4-pro-0813` model by default).
    - The LLM resolves the official target homepage based on its trained knowledge base.
 
 ---

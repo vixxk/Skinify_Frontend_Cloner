@@ -82,15 +82,69 @@ npm -v
 
 Puppeteer downloads its own Chrome executable during installation, but it relies on several shared Linux system libraries to run headlessly.
 
-### Manual Installation
-If Option A fails or if you want to install them manually, run the following command. 
+### Option A: Automatic Dependency Installation (Recommended)
+Navigate to your `backend` directory and run Puppeteer's automated dependency installer:
+```bash
+cd ~/Skinify_Frontend_Cloner/backend
+sudo npx puppeteer browsers install chrome --install-deps
+```
 
-*Note: For Ubuntu 24.04+ (or Resolute), run this command which uses `libasound2t64` instead of `libasound2`:*
+---
+
+### Option B: Manual Installation via APT
+
+#### For Ubuntu 24.04 LTS (Noble Numbat)
+> [!NOTE]
+> Ubuntu 24.04 transitioned to 64-bit time_t, appending `t64` to library names (such as `libatk1.0-0t64` instead of `libatk1.0-0`). Using older package names causes APT to fail with `Unable to locate package`.
+
 ```bash
 sudo apt-get update && sudo apt-get install -y \
   ca-certificates \
   fonts-liberation \
   libasound2t64 \
+  libatk-bridge2.0-0t64 \
+  libatk1.0-0t64 \
+  libc6 \
+  libcairo2 \
+  libcups2t64 \
+  libdbus-1-3 \
+  libdrm2 \
+  libexpat1 \
+  libfontconfig1 \
+  libgbm1 \
+  libgcc-s1 \
+  libglib2.0-0t64 \
+  libgtk-3-0t64 \
+  libnspr4 \
+  libnss3 \
+  libpango-1.0-0 \
+  libpangocairo-1-0 \
+  libstdc++6 \
+  libx11-6 \
+  libx11-xcb1 \
+  libxcb1 \
+  libxcomposite1 \
+  libxcursor1 \
+  libxdamage1 \
+  libxext6 \
+  libxfixes3 \
+  libxi6 \
+  libxkbcommon0 \
+  libxrandr2 \
+  libxrender1 \
+  libxss1 \
+  libxtst6 \
+  lsb-release \
+  xdg-utils \
+  wget
+```
+
+#### For Ubuntu 22.04 LTS (Jammy Jellyfish)
+```bash
+sudo apt-get update && sudo apt-get install -y \
+  ca-certificates \
+  fonts-liberation \
+  libasound2 \
   libatk-bridge2.0-0 \
   libatk1.0-0 \
   libc6 \
@@ -100,9 +154,7 @@ sudo apt-get update && sudo apt-get install -y \
   libexpat1 \
   libfontconfig1 \
   libgbm1 \
-  libgcc1 \
-  libgconf-2-4 \
-  libgdk-pixbuf2.0-0 \
+  libgcc-s1 \
   libglib2.0-0 \
   libgtk-3-0 \
   libnspr4 \
@@ -127,8 +179,6 @@ sudo apt-get update && sudo apt-get install -y \
   xdg-utils \
   wget
 ```
-
-*(If you are on an older Ubuntu version like 22.04, replace `libasound2t64` with `libasound2` in the command above).*
 
 ---
 
@@ -161,7 +211,7 @@ Paste your production configurations (adjust API keys and model options as neede
 PORT=3001
 GEMINI_API_KEY=your_gemini_api_key
 FIREWORKS_API_KEY=your_fireworks_api_key
-FIREWORKS_MODEL=accounts/fireworks/models/deepseek-v4-pro
+FIREWORKS_MODEL=accounts/fireworks/models/deepseek-v4-pro-0813
 ```
 *Press `Ctrl+O` then `Enter` to save, and `Ctrl+X` to exit nano.*
 
@@ -309,4 +359,29 @@ After Nginx is installed, `/etc/nginx/sites-available` will be created automatic
 ```bash
 sudo nano /etc/nginx/sites-available/skinify-backend
 ```
+
+---
+
+### Error 3: `error while loading shared libraries: libatk-1.0.so.0: cannot open shared object file`
+This error occurs when Puppeteer tries to launch Chromium on Linux, but the required GTK/ATK accessibility shared libraries are missing. On **Ubuntu 24.04 LTS**, the package name was changed to `libatk1.0-0t64` (and `libatk-bridge2.0-0t64`), so older `apt` instructions skip or fail to install it.
+
+**Quick Fix on your EC2 terminal:**
+1. Run Puppeteer's automated dependency installer (easiest & installs all missing libraries):
+   ```bash
+   cd ~/Skinify_Frontend_Cloner/backend
+   sudo npx puppeteer browsers install chrome --install-deps
+   ```
+   *OR install the packages directly via APT:*
+   ```bash
+   sudo apt-get update && sudo apt-get install -y libatk1.0-0t64 libatk-bridge2.0-0t64
+   ```
+2. Restart the PM2 application:
+   ```bash
+   pm2 restart skinify-backend
+   ```
+3. Test scraping again and monitor logs:
+   ```bash
+   pm2 logs skinify-backend
+   ```
+
 

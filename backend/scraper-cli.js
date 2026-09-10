@@ -187,7 +187,7 @@ export async function resolveWebsiteURL(keyword) {
       try {
         lastApiCallTime = Date.now();
         const response = await openai.chat.completions.create({
-          model: process.env.FIREWORKS_MODEL || 'accounts/fireworks/models/deepseek-v4-pro',
+          model: process.env.FIREWORKS_MODEL || 'accounts/fireworks/models/deepseek-v4-pro-0813',
           messages: [
             {
               role: 'system',
@@ -198,7 +198,7 @@ Examples:
             },
             { role: 'user', content: `Website URL for: ${cleanKeyword}` }
           ],
-          max_tokens: 100,
+          max_tokens: 250,
           temperature: 0.3
         });
 
