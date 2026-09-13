@@ -1,12 +1,17 @@
-import puppeteer from "puppeteer";
+import puppeteer, { Browser, Page } from "puppeteer";
 import fs from "fs-extra";
-import path from "path";
-import { URL } from "url";
+import path from "node:path";
+import { URL } from "node:url";
 import * as cheerio from "cheerio";
 
+interface StyleNode {
+  index: number;
+  element: any;
+}
+
 export class ContentExtractor {
-  static async extractFrontendContent(url, outputDir) {
-    let browser = null;
+  static async extractFrontendContent(url: string, outputDir: string): Promise<void> {
+    let browser: Browser | null = null;
     try {
       await fs.ensureDir(outputDir);
 
@@ -23,22 +28,24 @@ export class ContentExtractor {
         ]
       });
 
-      const page = await browser.newPage();
+      const page: Page = await browser.newPage();
       await page.setViewport({ width: 1920, height: 1080 });
 
-      const assetResponses = new Map();
+      const assetResponses = new Map<string, { buffer: Buffer }>();
       page.on("response", async (res) => {
         try {
           const reqUrl = res.url();
           if (res.status() >= 200 && res.status() < 400) {
             const buffer = await res.buffer();
-            if (buffer.length > 0) assetResponses.set(reqUrl, { buffer });
+            if (buffer.length > 0) {
+              assetResponses.set(reqUrl, { buffer });
+            }
           }
         } catch {}
       });
 
       await page.goto(url, { waitUntil: "domcontentloaded", timeout: 45000 });
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      await new Promise<void>(resolve => setTimeout(resolve, 3000));
 
       let html = await page.content();
 
@@ -68,10 +75,12 @@ export class ContentExtractor {
       const $ = cheerio.load(html);
       const styleDir = path.join(outputDir, "styles");
       await fs.ensureDir(styleDir);
-      const styleNodes = [];
-      $("style").each((i, elem) => styleNodes.push({ index: i, element: elem }));
+      const styleNodes: StyleNode[] = [];
+      $("style").each((i, elem) => {
+        styleNodes.push({ index: i, element: elem });
+      });
       styleNodes.forEach(({ index, element }) => {
-        const cssContent = $(element).html();
+        const cssContent = $(element).html() || "";
         const styleFile = `inline-style-${index}.css`;
         const styleRelPath = path.posix.join("styles", styleFile);
         const styleOutPath = path.join(styleDir, styleFile);
@@ -101,8 +110,8 @@ export class ContentExtractor {
             const newSrcset = originalValue
               .split(",")
               .map((part) => {
-                const [url, descriptor] = part.trim().split(/\s+/);
-                return `${this.getRelativePath(url, baseUrl)} ${descriptor || ""}`.trim();
+                const [assetPartUrl, descriptor] = part.trim().split(/\s+/);
+                return `${this.getRelativePath(assetPartUrl, baseUrl)} ${descriptor || ""}`.trim();
               })
               .join(", ");
             el.attr(attr, newSrcset);
@@ -116,13 +125,15 @@ export class ContentExtractor {
       await fs.writeFile(path.join(outputDir, "index.html"), $.html(), "utf-8");
 
     } finally {
-      try { if (browser) await browser.close(); } catch {}
+      try {
+        if (browser) await browser.close();
+      } catch {}
     }
   }
 
-  static async autoScroll(page) {
+  static async autoScroll(page: Page): Promise<void> {
     await page.evaluate(async () => {
-      await new Promise((resolve) => {
+      await new Promise<void>((resolve) => {
         let totalHeight = 0;
         const distance = 300;
         const timer = setInterval(() => {
@@ -137,7 +148,7 @@ export class ContentExtractor {
     });
   }
 
-  static async loadLazyImages(page) {
+  static async loadLazyImages(page: Page): Promise<void> {
     await page.evaluate(() => {
       document.querySelectorAll("img").forEach((img) => {
         const dataSrc = img.getAttribute("data-src") ||
@@ -148,10 +159,10 @@ export class ContentExtractor {
         }
       });
     });
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise<void>(resolve => setTimeout(resolve, 2000));
   }
 
-  static getRelativePath(assetUrl, baseUrl) {
+  static getRelativePath(assetUrl: string, baseUrl: URL): string {
     try {
       const fullAssetUrl = new URL(assetUrl, baseUrl.href);
       if (fullAssetUrl.hostname !== baseUrl.hostname) return assetUrl;

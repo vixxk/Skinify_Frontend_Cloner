@@ -190,9 +190,10 @@ sudo apt-get update && sudo apt-get install -y \
    git clone https://github.com/vixxk/Skinify_Frontend_Cloner.git
    cd Skinify_Frontend_Cloner/backend
    ```
-2. Install npm dependencies:
+2. Install npm dependencies and build TypeScript:
    ```bash
    npm install
+   npm run build
    ```
    > [!NOTE]
    > The `postinstall` script inside `package.json` will automatically trigger Puppeteer to download the local Chrome browser binaries into your `node_modules` structure.
@@ -227,7 +228,7 @@ To keep the application running persistently in the background and restart it au
    ```
 2. Start your backend application:
    ```bash
-   pm2 start server.js --name "skinify-backend"
+   pm2 start dist/server.js --name "skinify-backend"
    ```
 3. Save the active process list:
    ```bash

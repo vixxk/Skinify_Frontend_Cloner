@@ -85,7 +85,8 @@ npm install
 ```bash
 # Start backend
 cd backend
-node server.js
+npm run dev    # For development (with tsx watch)
+# or: npm run build && npm start
 
 # Start frontend (in a new terminal)
 cd ../frontend
@@ -104,14 +105,18 @@ SKINIFY_FRONTEND_CLONER/
 ├── backend/
 │ ├── downloads/
 │ ├── node_modules/
-│ ├── controllers/
-│ ├── scrapers/
-│ ├── routes/
-│ ├── utils/
-│ ├── content-extractor.js
+│ ├── dist/
+│ ├── src/
+│ │ ├── chatbot/
+│ │ │ └── chatbot.ts
+│ │ ├── types/
+│ │ │ ├── archiver.d.ts
+│ │ │ └── website-scraper.d.ts
+│ │ ├── content-extractor.ts
+│ │ ├── scraper-cli.ts
+│ │ └── server.ts
 │ ├── puppeteer.config.cjs
-│ ├── scraper-cli.js
-│ ├── server.js
+│ ├── tsconfig.json
 │ ├── open.bat
 │ ├── open.sh
 │ ├── .env

@@ -1,118 +1,117 @@
 import 'dotenv/config';
 import OpenAI from 'openai';
 import scrape from 'website-scraper';
-import path from 'path';
-import fs from 'fs';
-import { URL as URLConstructor } from 'url';
+import path from 'node:path';
+import fs from 'node:fs';
+import { URL as URLConstructor } from 'node:url';
 import { ContentExtractor } from './content-extractor.js';
-import fetch from 'node-fetch';
+import fetch, { RequestInit } from 'node-fetch';
 import * as cheerio from 'cheerio';
-import dns from 'dns';
-import { promisify } from 'util';
-
+import dns from 'node:dns';
+import { promisify } from 'node:util';
 
 const openai = new OpenAI({
   apiKey: process.env.FIREWORKS_API_KEY || process.env.GEMINI_API_KEY,
   baseURL: process.env.FIREWORKS_BASE_URL || 'https://api.fireworks.ai/inference/v1',
 });
 
-const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+const delay = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
 let lastApiCallTime = 0;
-const MIN_TIME_BETWEEN_CALLS = 2000; 
+const MIN_TIME_BETWEEN_CALLS = 2000;
 
-function getUniqueFolderName(basePath, baseName) {
+function getUniqueFolderName(basePath: string, baseName: string): string {
   let folderName = baseName;
   let counter = 1;
-  
+
   let fullPath = path.join(basePath, folderName);
-  
+
   while (fs.existsSync(fullPath)) {
     folderName = `${baseName}(${counter})`;
     fullPath = path.join(basePath, folderName);
     counter++;
   }
-  
+
   return folderName;
 }
 
-export async function scrapeWebsiteByScraper(websiteURL,isRecursive = false) {
-  const baseDomainName = new URLConstructor(websiteURL).hostname.replace(/\./g, '-'); //folder name should contain '-' instead of '.'
+export async function scrapeWebsiteByScraper(websiteURL: string, isRecursive: boolean = false): Promise<string> {
+  const baseDomainName = new URLConstructor(websiteURL).hostname.replace(/\./g, '-');
   const downloadsPath = path.join(process.cwd(), 'downloads');
-  
+
   if (!fs.existsSync(downloadsPath)) {
     fs.mkdirSync(downloadsPath);
   }
-  
+
   const uniqueFolderName = getUniqueFolderName(downloadsPath, baseDomainName);
   const OUTPUT_DIR = path.join(downloadsPath, uniqueFolderName);
-  
+
   try {
     await scrape({
       urls: [websiteURL],
       directory: OUTPUT_DIR,
-      recursive: isRecursive, // Only scrape the landing page -> false, for subdomains also -> true
+      recursive: isRecursive,
       plugins: [],
       subdirectories: [
         { directory: 'images', extensions: ['.jpg', '.png', '.gif', '.svg'] },
         { directory: 'js', extensions: ['.js'] },
         { directory: 'css', extensions: ['.css'] },
       ],
-      urlFilter: (url) => url.startsWith('http'),
+      urlFilter: (url: string) => url.startsWith('http'),
     });
 
     return uniqueFolderName;
   } catch (error) {
     console.error('Error scraping website:', error);
-    
-    // Clean up the directory if scraping failed
+
     if (fs.existsSync(OUTPUT_DIR)) {
       fs.rmSync(OUTPUT_DIR, { recursive: true, force: true });
     }
-    
+
     throw error;
   }
 }
 
 const lookup = promisify(dns.lookup);
-const resolutionCache = new Map();
+const resolutionCache = new Map<string, string>();
 
-async function validateURL(url) {
+async function validateURL(url: string): Promise<boolean> {
   try {
-    const response = await fetch(url, {
+    const fetchOptions: RequestInit = {
       method: 'HEAD',
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
       },
-      timeout: 5000
-    });
+      signal: AbortSignal.timeout(5000)
+    };
+    const response = await fetch(url, fetchOptions);
     if (response.ok) return true;
-    
+
     // Fallback GET
     const responseGet = await fetch(url, {
       method: 'GET',
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
       },
-      timeout: 5000
+      signal: AbortSignal.timeout(5000)
     });
     return responseGet.ok;
-  } catch (e) {
+  } catch {
     return false;
   }
 }
 
-export async function resolveWebsiteURL(keyword) {
+export async function resolveWebsiteURL(keyword: string): Promise<string | null> {
   const cleanKeyword = keyword.trim();
   const cacheKey = cleanKeyword.toLowerCase();
 
   // 1. Local Memory Cache Lookup
   if (resolutionCache.has(cacheKey)) {
-    const cached = resolutionCache.get(cacheKey);
+    const cached = resolutionCache.get(cacheKey)!;
     console.log(`[Cache Hit] Resolved: "${cleanKeyword}" -> ${cached}`);
     return cached;
   }
 
-  let targetUrl = null;
+  let targetUrl: string | null = null;
 
   // 2. Direct Match Protocol (Regex and DNS Lookup)
   const urlPattern = /^(https?:\/\/)?([\w\-]+\.)+[\w\-]+(\/.*)?$/i;
@@ -127,7 +126,7 @@ export async function resolveWebsiteURL(keyword) {
       await lookup(hostname);
       console.log(`[DNS Succeeded] "${hostname}" is reachable`);
       targetUrl = candidateUrl;
-    } catch (dnsErr) {
+    } catch {
       console.warn(`[DNS Failed] Hostname "${cleanKeyword}" could not resolve. Defaulting to query search.`);
     }
   }
@@ -140,14 +139,15 @@ export async function resolveWebsiteURL(keyword) {
       const response = await fetch(ddgUrl, {
         headers: {
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-        }
+        },
+        signal: AbortSignal.timeout(5000)
       });
 
       if (response.ok) {
         const html = await response.text();
         const $ = cheerio.load(html);
-        const results = [];
-        $('.result__a').each((idx, el) => {
+        const results: string[] = [];
+        $('.result__a').each((_idx, el) => {
           let href = $(el).attr('href');
           if (href) {
             if (href.startsWith('//')) href = 'https:' + href;
@@ -166,12 +166,12 @@ export async function resolveWebsiteURL(keyword) {
           console.log(`[Search Succeeded] Resolved via DDG -> ${targetUrl}`);
         }
       }
-    } catch (ddgErr) {
+    } catch (ddgErr: any) {
       console.error('[Search Failed] DuckDuckGo resolution failed:', ddgErr.message);
     }
   }
 
-  // 4. LLM Fallback (Gemini API)
+  // 4. LLM Fallback (Fireworks/Gemini API)
   if (!targetUrl) {
     console.log(`[LLM Fallback] Resolving "${cleanKeyword}" via Fireworks API`);
     const now = Date.now();
@@ -202,25 +202,25 @@ Examples:
           temperature: 0.3
         });
 
-        const answer = response.choices[0].message.content.trim();
+        const answer = response.choices[0]?.message?.content?.trim() || "";
         const match = answer.match(/https?:\/\/[^\s"]+/);
         if (match) {
           targetUrl = match[0];
           console.log(`[LLM Succeeded] Resolved via Fireworks -> ${targetUrl}`);
           break;
         }
-      } catch (error) {
+      } catch (error: any) {
         if (error.status === 429) {
           retries--;
           if (retries > 0) {
-            console.log(`[Rate Limit] Retrying in ${retryDelay/1000}s... (${retries} retries remaining)`);
+            console.log(`[Rate Limit] Retrying in ${retryDelay / 1000}s... (${retries} retries remaining)`);
             await delay(retryDelay);
             retryDelay *= 2;
           } else {
             throw new Error('LLM rate limit exceeded. Resolve flow failed.');
           }
         } else {
-          console.error('[LLM Error] Error in Gemini resolution:', error.message);
+          console.error('[LLM Error] Error in LLM resolution:', error.message);
           throw error;
         }
       }
@@ -230,7 +230,7 @@ Examples:
   // 5. Pre-flight Validation & Protocol Adjustments
   if (targetUrl) {
     let isValid = await validateURL(targetUrl);
-    
+
     // Fallback: If apex domain fails, test www prefix
     if (!isValid && !targetUrl.includes('www.') && !targetUrl.includes('http://localhost') && !targetUrl.includes('127.0.0.1')) {
       const parsedUrl = new URLConstructor(targetUrl);
@@ -258,7 +258,7 @@ Examples:
   return null;
 }
 
-export async function scrapeWebsiteByPuppeteer(websiteURL) {
+export async function scrapeWebsiteByPuppeteer(websiteURL: string): Promise<string> {
   const baseDomainName = new URLConstructor(websiteURL).hostname.replace(/\./g, '-');
   const downloadsPath = path.join(process.cwd(), 'downloads');
 

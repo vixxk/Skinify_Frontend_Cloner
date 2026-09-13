@@ -1,35 +1,38 @@
-import express from "express";
-import path from "path";
-import fs from "fs";
+import express, { Request, Response } from "express";
+import path from "node:path";
+import fs from "node:fs";
 import archiver from "archiver";
 import cors from "cors";
-import bodyParser from "body-parser";
-import { resolveWebsiteURL, scrapeWebsiteByScraper,scrapeWebsiteByPuppeteer} from "./scraper-cli.js";
+import { resolveWebsiteURL, scrapeWebsiteByScraper, scrapeWebsiteByPuppeteer } from "./scraper-cli.js";
 import chatbotRouter from "./chatbot/chatbot.js";
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(cors());
-
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.use("/api/chat", chatbotRouter);
 
-app.get("/health", (req, res) => {
+app.get("/health", (_req: Request, res: Response) => {
   res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
-
-app.post("/api/resolve/1", async (req, res) => {
-  const { keyword,isRecursive } = req.body;
-  if (!keyword) return res.status(400).json({ error: "Keyword missing" });
+app.post("/api/resolve/1", async (req: Request, res: Response): Promise<void> => {
+  const { keyword, isRecursive } = req.body as { keyword?: string; isRecursive?: boolean };
+  if (!keyword) {
+    res.status(400).json({ error: "Keyword missing" });
+    return;
+  }
 
   try {
     const url = await resolveWebsiteURL(keyword);
-    if (!url) return res.json({ url: null, folder: null });
+    if (!url) {
+      res.json({ url: null, folder: null });
+      return;
+    }
 
-    const folder = await scrapeWebsiteByScraper(url,isRecursive);
+    const folder = await scrapeWebsiteByScraper(url, isRecursive);
     res.json({ url, folder });
   } catch (err) {
     console.error(err);
@@ -37,13 +40,19 @@ app.post("/api/resolve/1", async (req, res) => {
   }
 });
 
-app.post("/api/resolve/2", async (req, res) => {
-  const { keyword } = req.body;
-  if (!keyword) return res.status(400).json({ error: "Keyword missing" });
+app.post("/api/resolve/2", async (req: Request, res: Response): Promise<void> => {
+  const { keyword } = req.body as { keyword?: string };
+  if (!keyword) {
+    res.status(400).json({ error: "Keyword missing" });
+    return;
+  }
 
   try {
     const url = await resolveWebsiteURL(keyword);
-    if (!url) return res.json({ url: null, folder: null });
+    if (!url) {
+      res.json({ url: null, folder: null });
+      return;
+    }
 
     const folder = await scrapeWebsiteByPuppeteer(url);
     res.json({ url, folder });
@@ -53,16 +62,24 @@ app.post("/api/resolve/2", async (req, res) => {
   }
 });
 
+app.get("/download/:folderName", async (req: Request, res: Response): Promise<void> => {
+  const folderName = req.params.folderName;
+  if (typeof folderName !== "string" || !folderName) {
+    res.status(400).send("Folder name missing or invalid");
+    return;
+  }
 
-app.get("/download/:folderName", async (req, res) => {
-  const folderPath = path.join(process.cwd(), "downloads", req.params.folderName);
+  const folderPath = path.join(process.cwd(), "downloads", folderName);
 
-  if (!fs.existsSync(folderPath)) return res.status(404).send("Folder not found");
-  
+  if (!fs.existsSync(folderPath)) {
+    res.status(404).send("Folder not found");
+    return;
+  }
+
   // Clean filename for proper UX
-  let cleanName = req.params.folderName.replace(/\(\d+\)$/, "");
+  const cleanName = folderName.replace(/\(\d+\)$/, "");
   // Reconstruct domain format (replace dashes with dots)
-  let domainName = cleanName.replace(/-/g, ".");
+  const domainName = cleanName.replace(/-/g, ".");
   const downloadFileName = `skinify-${domainName}.zip`;
 
   // This tells the browser that this file is meant to be downloaded, not displayed
@@ -97,8 +114,8 @@ app.get("/download/:folderName", async (req, res) => {
 });
 
 // Run cleanup task every 10 minutes to evict folders older than 30 minutes
-const CLEANUP_INTERVAL = 10 * 60 * 1000; 
-const MAX_AGE = 30 * 60 * 1000;          
+const CLEANUP_INTERVAL = 10 * 60 * 1000;
+const MAX_AGE = 30 * 60 * 1000;
 
 setInterval(() => {
   const downloadsPath = path.join(process.cwd(), "downloads");
@@ -134,5 +151,3 @@ setInterval(() => {
 }, CLEANUP_INTERVAL);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-// trial

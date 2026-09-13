@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import OpenAI from 'openai';
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 
 const router = Router();
 
@@ -59,10 +59,11 @@ As a senior software engineer specialized in web crawling, rendering engines, an
 - Tables: NEVER use markdown tables. Since the chat window is narrow, tables format poorly. Instead, always present structured or tabular data as a clean bulleted list with keys in bold (e.g., "* **Field Name:** Value").
 - Refer to yourself as "Skiny".`;
 
-router.post('/', async (req, res) => {
+router.post('/', async (req: Request, res: Response): Promise<void> => {
   const { messages } = req.body;
   if (!messages || !Array.isArray(messages)) {
-    return res.status(400).json({ error: 'Messages array is required.' });
+    res.status(400).json({ error: 'Messages array is required.' });
+    return;
   }
 
   try {
@@ -76,7 +77,7 @@ router.post('/', async (req, res) => {
       temperature: 0.7,
     });
 
-    const reply = response.choices[0].message;
+    const reply = response.choices[0]?.message;
     if (reply && reply.content) {
       reply.content = reply.content.replace(/<think>[\s\S]*?(<\/think>|$)/g, '').trim();
     }
