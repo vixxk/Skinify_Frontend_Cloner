@@ -31,10 +31,7 @@ jobs:
             npm run build
 
             # Ensure PM2 runs compiled server
-            if pm2 describe skinify-backend > /dev/null 2>&1; then
-              pm2 restart skinify-backend --update-env || (pm2 delete skinify-backend && pm2 start dist/server.js --name "skinify-backend")
-            else
-              pm2 start dist/server.js --name "skinify-backend"
-            fi
+            pm2 delete skinify-backend || true
+            pm2 start dist/server.js --name "skinify-backend"
             pm2 save
 
