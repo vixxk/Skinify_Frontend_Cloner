@@ -77,7 +77,16 @@ app.get("/download/:folderName", async (req: Request, res: Response): Promise<vo
     return;
   }
 
-  const folderPath = path.join(process.cwd(), "downloads", folderName);
+  const downloadsRoot = path.join(process.cwd(), "downloads");
+  const folderPath = path.join(downloadsRoot, folderName);
+
+  if (
+    folderPath !== downloadsRoot &&
+    !folderPath.startsWith(downloadsRoot + path.sep)
+  ) {
+    res.status(400).send("Invalid folder name");
+    return;
+  }
 
   if (!fs.existsSync(folderPath)) {
     res.status(404).send("Folder not found");
