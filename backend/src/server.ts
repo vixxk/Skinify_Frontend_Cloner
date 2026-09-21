@@ -2,12 +2,22 @@ import express, { Request, Response } from "express";
 import path from "node:path";
 import fs from "node:fs";
 import archiver from "archiver";
+import cors from "cors";
 import { resolveWebsiteURL, scrapeWebsiteByScraper, scrapeWebsiteByPuppeteer } from "./scraper-cli.js";
 import chatbotRouter from "./chatbot/chatbot.js";
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With", "Accept"],
+    optionsSuccessStatus: 200,
+  })
+);
 app.use(express.json());
 
 app.use("/api/chat", chatbotRouter);

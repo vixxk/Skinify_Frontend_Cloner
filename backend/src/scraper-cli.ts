@@ -11,7 +11,7 @@ import dns from 'node:dns';
 import { promisify } from 'node:util';
 
 const openai = new OpenAI({
-  apiKey: process.env.FIREWORKS_API_KEY || process.env.GEMINI_API_KEY,
+  apiKey: process.env.FIREWORKS_API_KEY || process.env.GEMINI_API_KEY || "dummy-key",
   baseURL: process.env.FIREWORKS_BASE_URL || 'https://api.fireworks.ai/inference/v1',
 });
 

@@ -17,6 +17,7 @@
   "dependencies": {
     "archiver": "^7.0.1",
     "cheerio": "^1.1.2",
+    "cors": "^2.8.6",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "extra": "^0.2.1",
@@ -31,6 +32,7 @@
     "website-scraper": "^5.3.1"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^26.5.1",
