@@ -385,4 +385,48 @@ This error occurs when Puppeteer tries to launch Chromium on Linux, but the requ
    pm2 logs skinify-backend
    ```
 
+---
+
+### Error 4: `code: 'ENOSPC', syscall: 'write'` / `Error: ENOENT: no such file or directory, mkdir '.../downloads/...'`
+This error occurs when the EC2 disk is **100% full** (`ENOSPC` = Error No Space). Default EC2 root volumes are 8GB; between the 2GB swapfile, system packages, PM2 logs, Chromium temp profiles in `/tmp`, and scraped site folders, disk space can hit 0 MB, causing writes and directory creations to fail immediately.
+
+**Step 1: Check your disk usage on EC2:**
+```bash
+df -h
+```
+
+**Step 2: Clean disk space immediately:**
+```bash
+# 1. Flush/truncate accumulated PM2 log files
+pm2 flush
+
+# 2. Clear Puppeteer Chromium profiles in /tmp
+rm -rf /tmp/puppeteer_dev_chrome_profile* /tmp/core* /tmp/*.tmp
+
+# 3. Clear old scraped folders in backend downloads
+rm -rf ~/Skinify_Frontend_Cloner/backend/downloads/*
+
+# 4. Clean APT package cache & unused packages
+sudo apt-get clean
+sudo apt-get autoremove -y
+
+# 5. Clean npm cache
+npm cache clean --force
+```
+
+**Step 3: Prevent PM2 logs from filling disk again (Install Logrotate):**
+```bash
+pm2 install pm2-logrotate
+pm2 set pm2-logrotate:max_size 10M
+pm2 set pm2-logrotate:retain 5
+```
+
+**Step 4 (Recommended): Increase AWS EBS Volume:**
+In AWS Console -> **EC2** -> **Volumes** -> select your instance's volume -> **Actions** -> **Modify Volume** -> change from 8 GiB to **20 GiB** (AWS Free Tier includes up to 30 GiB). Then expand the partition inside Ubuntu:
+```bash
+sudo growpart /dev/xvda 1 || sudo growpart /dev/nvme0n1p1 1
+sudo resize2fs /dev/xvda1 || sudo resize2fs /dev/nvme0n1p1
+```
+
+
 

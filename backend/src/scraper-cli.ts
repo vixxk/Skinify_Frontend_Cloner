@@ -39,7 +39,7 @@ export async function scrapeWebsiteByScraper(websiteURL: string, isRecursive: bo
   const downloadsPath = path.join(process.cwd(), 'downloads');
 
   if (!fs.existsSync(downloadsPath)) {
-    fs.mkdirSync(downloadsPath);
+    fs.mkdirSync(downloadsPath, { recursive: true });
   }
 
   const uniqueFolderName = getUniqueFolderName(downloadsPath, baseDomainName);
@@ -263,11 +263,12 @@ export async function scrapeWebsiteByPuppeteer(websiteURL: string): Promise<stri
   const downloadsPath = path.join(process.cwd(), 'downloads');
 
   if (!fs.existsSync(downloadsPath)) {
-    fs.mkdirSync(downloadsPath);
+    fs.mkdirSync(downloadsPath, { recursive: true });
   }
 
   const uniqueFolderName = getUniqueFolderName(downloadsPath, baseDomainName);
   const OUTPUT_DIR = path.join(downloadsPath, uniqueFolderName);
+  fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 
   try {
     await ContentExtractor.extractFrontendContent(websiteURL, OUTPUT_DIR);

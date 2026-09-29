@@ -73,7 +73,8 @@ export class ContentExtractor {
       }
 
       const $ = cheerio.load(html);
-      const styleDir = path.join(outputDir, "styles");
+      await fs.ensureDir(outputDir);
+      const styleDir = path.join(outputDir, "inline-styles");
       await fs.ensureDir(styleDir);
       const styleNodes: StyleNode[] = [];
       $("style").each((i, elem) => {
@@ -82,10 +83,14 @@ export class ContentExtractor {
       styleNodes.forEach(({ index, element }) => {
         const cssContent = $(element).html() || "";
         const styleFile = `inline-style-${index}.css`;
-        const styleRelPath = path.posix.join("styles", styleFile);
+        const styleRelPath = path.posix.join("inline-styles", styleFile);
         const styleOutPath = path.join(styleDir, styleFile);
-        fs.writeFileSync(styleOutPath, cssContent, "utf-8");
-        $(element).replaceWith(`<link rel="stylesheet" href="${styleRelPath}">`);
+        try {
+          fs.writeFileSync(styleOutPath, cssContent, "utf-8");
+          $(element).replaceWith(`<link rel="stylesheet" href="${styleRelPath}">`);
+        } catch (e) {
+          console.error(`Failed to write inline stylesheet ${styleFile}:`, e);
+        }
       });
 
       const selectors = [
